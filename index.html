@@ -214,28 +214,47 @@
 
     <script>
         /* --------------------------
-           CONFIGURACIÓN Y ESTADO
+           CONFIGURACIÓN Y BASE DE DATOS
         ---------------------------*/
-        // 1. Buscamos la llave en la caja fuerte del navegador
         let apiKey = localStorage.getItem("evyon_api_key");
-        let currentUser = null;
+        let currentUserData = null; // Ahora guardaremos toda la info del usuario
 
+        // 👇 AQUÍ EDITAS TUS USUARIOS Y MENSAJES 👇
         const INSTITUTION_DB = {
-            "admin": "evyon2025",
-            "institucion1": "demo123",
-            "institucion2": "acceso456"
+            "admin": {
+                pass: "evyon2025",
+                name: "ADMINISTRADOR",
+                welcome: "Modo Dios activado. ¿Qué vamos a construir hoy?"
+            },
+            "oxigeno": {
+                pass: "oxi123",
+                name: "Gimnasio Oxígeno",
+                welcome: "¡Hola equipo Oxígeno! Listos para optimizar la nutrición de sus atletas."
+            },
+            "goldgym": {
+                pass: "gold99",
+                name: "Gold's Gym Norte",
+                welcome: "Bienvenido. Recuerda: No pain, no gain. ¿En qué ayudamos a tus socios hoy?"
+            },
+            "cruzazul": {
+                pass: "azul2025",
+                name: "Club Deportivo Cruz Azul",
+                welcome: "Saludos al equipo médico. EVYON está listo para asistir en el rendimiento."
+            }
         };
 
         /* --------------------------
-           LÓGICA DE LOGIN
+           LÓGICA DE LOGIN MEJORADA
         ---------------------------*/
         function attemptLogin() {
-            const user = document.getElementById("username").value.trim().toLowerCase();
-            const pass = document.getElementById("password").value.trim();
+            // Convertimos a minúsculas para que no importe si escriben "Admin" o "admin"
+            const userKey = document.getElementById("username").value.trim().toLowerCase();
+            const passInput = document.getElementById("password").value.trim();
             const errorMsg = document.getElementById("loginError");
 
-            if (INSTITUTION_DB[user] === pass) {
-                currentUser = user;
+            // Verificamos si el usuario existe Y si la contraseña coincide
+            if (INSTITUTION_DB[userKey] && INSTITUTION_DB[userKey].pass === passInput) {
+                currentUserData = INSTITUTION_DB[userKey]; // Guardamos quién entró
                 errorMsg.style.opacity = "0";
                 transitionToChat();
             } else {
@@ -252,11 +271,11 @@
 
             setTimeout(() => { chat.style.opacity = "1"; }, 50);
 
-            // Solo saluda si el chat está vacío
+            // 👇 AQUÍ USAMOS EL MENSAJE PERSONALIZADO 👇
             if(document.getElementById("chatBox").children.length === 0){
                  appendMessage(
                     "EVYON IA",
-                    `¡Hola! Bienvenido al sistema de <b>${currentUser.toUpperCase()}</b>. Soy EVYON IA 🤖 ¿En qué puedo ayudarte hoy con tu entrenamiento?`,
+                    `<b>${currentUserData.welcome}</b><br><br>Soy tu asistente virtual.`, 
                     "bot-message"
                 );
             }
@@ -264,9 +283,10 @@
             setTimeout(() => document.getElementById("userInput").focus(), 300);
         }
 
-        function logout() { 
-            location.reload(); 
-        }
+        /* --------------------------
+           RESTO DEL CÓDIGO (Igual que antes)
+        ---------------------------*/
+        function logout() { location.reload(); }
 
         function shakeModal() {
             const box = document.getElementById("login-screen");
@@ -275,22 +295,15 @@
             setTimeout(() => box.style.transform = "translateX(0)", 200);
         }
 
-        function handleLoginKey(e) {
-            if (e.key === "Enter") attemptLogin();
-        }
+        function handleLoginKey(e) { if (e.key === "Enter") attemptLogin(); }
 
-        /* --------------------------
-           LÓGICA DEL CHAT + SEGURIDAD DE API KEY
-        ---------------------------*/
-        
-        // Esta función pide la llave si no existe
         async function checkApiKey() {
             if (!apiKey) {
-                apiKey = prompt("🔒 CONFIGURACIÓN INICIAL:\n\nIngresa tu API Key de OpenAI para activar a EVYON.\n(Se guardará segura solo en este navegador)");
+                apiKey = prompt("🔒 INGRESA TU API KEY:\n(Se guardará segura en tu navegador)");
                 if (apiKey) {
-                    localStorage.setItem("evyon_api_key", apiKey); // Guardar en memoria local
+                    localStorage.setItem("evyon_api_key", apiKey);
                 } else {
-                    alert("Se requiere una API Key para que la IA responda.");
+                    alert("Se requiere API Key.");
                     return false;
                 }
             }
@@ -298,7 +311,6 @@
         }
 
         async function sendMessage() {
-            // 1. Verificamos si tenemos la llave antes de enviar nada
             if (!await checkApiKey()) return;
 
             let input = document.getElementById("userInput");
@@ -307,7 +319,6 @@
 
             appendMessage("Tú", text, "user-message");
             input.value = "";
-
             const loadingId = showLoadingIndicator();
 
             try {
@@ -322,12 +333,12 @@
                         messages: [
                             {
                                 role: "system",
-                                content: `Actúa como un asesor experto en nutrición y rendimiento deportivo para la institución ${currentUser}. Responde siempre en español. Sé breve y motivador.`
+                                // Personalizamos también cómo se comporta la IA según la institución
+                                content: `Eres un experto en deporte asesorando a: ${currentUserData.name}. Responde en español, sé breve y profesional.`
                             },
                             { role: "user", content: text }
                         ],
-                        max_tokens: 150,
-                        temperature: 0.7
+                        max_tokens: 150
                     })
                 });
 
@@ -335,22 +346,17 @@
                 removeLoadingIndicator(loadingId);
 
                 if (data.error) {
-                    // Si la llave es incorrecta, la borramos para pedirla de nuevo
                     if (data.error.code === 'invalid_api_key' || data.error.code === 'invalid_api_key_header') {
                         localStorage.removeItem("evyon_api_key");
                         apiKey = null;
-                        appendMessage("SISTEMA", "❌ Tu API Key es inválida. Intenta enviar el mensaje otra vez para ingresarla de nuevo.", "bot-message");
-                    } else {
-                        throw new Error(data.error.message);
-                    }
+                        appendMessage("SISTEMA", "❌ API Key inválida.", "bot-message");
+                    } else { throw new Error(data.error.message); }
                 } else {
                     appendMessage("EVYON IA", data.choices[0].message.content, "bot-message");
                 }
-
             } catch (err) {
                 removeLoadingIndicator(loadingId);
-                console.error(err);
-                appendMessage("EVYON IA", "⚠️ Error de conexión. Revisa tu internet o tu API Key.", "bot-message");
+                appendMessage("EVYON IA", "⚠️ Error de conexión.", "bot-message");
             }
         }
 
