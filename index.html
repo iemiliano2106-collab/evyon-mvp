@@ -216,7 +216,7 @@
         /* --------------------------
            CONFIGURACIÓN Y ESTADO
         ---------------------------*/
-        // Buscamos la llave en la memoria del navegador. Si no existe, estará vacía.
+        // 1. Buscamos la llave en la caja fuerte del navegador
         let apiKey = localStorage.getItem("evyon_api_key");
         let currentUser = null;
 
@@ -252,11 +252,11 @@
 
             setTimeout(() => { chat.style.opacity = "1"; }, 50);
 
-            // Mensaje de bienvenida
+            // Solo saluda si el chat está vacío
             if(document.getElementById("chatBox").children.length === 0){
                  appendMessage(
                     "EVYON IA",
-                    `¡Hola! Bienvenido al sistema de <b>${currentUser.toUpperCase()}</b>. Soy EVYON IA 🤖 ¿En qué puedo ayudarte hoy?`,
+                    `¡Hola! Bienvenido al sistema de <b>${currentUser.toUpperCase()}</b>. Soy EVYON IA 🤖 ¿En qué puedo ayudarte hoy con tu entrenamiento?`,
                     "bot-message"
                 );
             }
@@ -265,8 +265,6 @@
         }
 
         function logout() { 
-            // Opcional: Si quieres que al salir se borre la API Key para seguridad total, descomenta la siguiente línea:
-            // localStorage.removeItem("evyon_api_key"); 
             location.reload(); 
         }
 
@@ -282,16 +280,17 @@
         }
 
         /* --------------------------
-           LÓGICA DEL CHAT CON SEGURIDAD
+           LÓGICA DEL CHAT + SEGURIDAD DE API KEY
         ---------------------------*/
+        
+        // Esta función pide la llave si no existe
         async function checkApiKey() {
-            // Si no tenemos la llave guardada, la pedimos
             if (!apiKey) {
-                apiKey = prompt("🔒 MODO SEGURO:\n\nIngresa tu API Key de OpenAI para activar el chat (Solo se guardará en tu navegador):");
+                apiKey = prompt("🔒 CONFIGURACIÓN INICIAL:\n\nIngresa tu API Key de OpenAI para activar a EVYON.\n(Se guardará segura solo en este navegador)");
                 if (apiKey) {
-                    localStorage.setItem("evyon_api_key", apiKey); // Guardar para el futuro
+                    localStorage.setItem("evyon_api_key", apiKey); // Guardar en memoria local
                 } else {
-                    alert("Se requiere una API Key para usar la inteligencia de EVYON.");
+                    alert("Se requiere una API Key para que la IA responda.");
                     return false;
                 }
             }
@@ -299,7 +298,7 @@
         }
 
         async function sendMessage() {
-            // 1. Verificar seguridad antes de nada
+            // 1. Verificamos si tenemos la llave antes de enviar nada
             if (!await checkApiKey()) return;
 
             let input = document.getElementById("userInput");
@@ -323,7 +322,7 @@
                         messages: [
                             {
                                 role: "system",
-                                content: `Actúa como un asesor experto en nutrición y rendimiento deportivo para la institución ${currentUser}. Responde siempre en español.`
+                                content: `Actúa como un asesor experto en nutrición y rendimiento deportivo para la institución ${currentUser}. Responde siempre en español. Sé breve y motivador.`
                             },
                             { role: "user", content: text }
                         ],
@@ -336,11 +335,11 @@
                 removeLoadingIndicator(loadingId);
 
                 if (data.error) {
-                    // Si el error es de autenticación (clave incorrecta o vencida)
-                    if (data.error.code === 'invalid_api_key') {
-                        localStorage.removeItem("evyon_api_key"); // Borramos la clave mala
+                    // Si la llave es incorrecta, la borramos para pedirla de nuevo
+                    if (data.error.code === 'invalid_api_key' || data.error.code === 'invalid_api_key_header') {
+                        localStorage.removeItem("evyon_api_key");
                         apiKey = null;
-                        appendMessage("SISTEMA", "❌ Tu API Key es inválida o expiró. Intenta enviar el mensaje de nuevo para ingresarla otra vez.", "bot-message");
+                        appendMessage("SISTEMA", "❌ Tu API Key es inválida. Intenta enviar el mensaje otra vez para ingresarla de nuevo.", "bot-message");
                     } else {
                         throw new Error(data.error.message);
                     }
@@ -351,7 +350,7 @@
             } catch (err) {
                 removeLoadingIndicator(loadingId);
                 console.error(err);
-                appendMessage("EVYON IA", "⚠️ Error de conexión. Verifica tu internet o tu API Key.", "bot-message");
+                appendMessage("EVYON IA", "⚠️ Error de conexión. Revisa tu internet o tu API Key.", "bot-message");
             }
         }
 
