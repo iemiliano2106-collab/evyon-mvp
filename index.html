@@ -214,9 +214,10 @@
 
     <script>
         /* --------------------------
-           CONFIGURACIÓN Y LOGIN
+           CONFIGURACIÓN Y ESTADO
         ---------------------------*/
-        let apiKey = "AQUI_VA_TU_API_KEY";
+        // Buscamos la llave en la memoria del navegador. Si no existe, estará vacía.
+        let apiKey = localStorage.getItem("evyon_api_key");
         let currentUser = null;
 
         const INSTITUTION_DB = {
@@ -225,6 +226,9 @@
             "institucion2": "acceso456"
         };
 
+        /* --------------------------
+           LÓGICA DE LOGIN
+        ---------------------------*/
         function attemptLogin() {
             const user = document.getElementById("username").value.trim().toLowerCase();
             const pass = document.getElementById("password").value.trim();
@@ -248,17 +252,23 @@
 
             setTimeout(() => { chat.style.opacity = "1"; }, 50);
 
-            appendMessage(
-                "EVYON IA",
-                `¡Hola! Bienvenido al sistema de <b>${currentUser.toUpperCase()}</b>. Soy EVYON IA 🤖 ¿En qué puedo ayudarte hoy con tu entrenamiento?`,
-                "bot-message"
-            );
+            // Mensaje de bienvenida
+            if(document.getElementById("chatBox").children.length === 0){
+                 appendMessage(
+                    "EVYON IA",
+                    `¡Hola! Bienvenido al sistema de <b>${currentUser.toUpperCase()}</b>. Soy EVYON IA 🤖 ¿En qué puedo ayudarte hoy?`,
+                    "bot-message"
+                );
+            }
 
-            // Autofocus en el input
             setTimeout(() => document.getElementById("userInput").focus(), 300);
         }
 
-        function logout() { location.reload(); }
+        function logout() { 
+            // Opcional: Si quieres que al salir se borre la API Key para seguridad total, descomenta la siguiente línea:
+            // localStorage.removeItem("evyon_api_key"); 
+            location.reload(); 
+        }
 
         function shakeModal() {
             const box = document.getElementById("login-screen");
@@ -271,11 +281,27 @@
             if (e.key === "Enter") attemptLogin();
         }
 
-
         /* --------------------------
-           LÓGICA DEL CHAT
+           LÓGICA DEL CHAT CON SEGURIDAD
         ---------------------------*/
+        async function checkApiKey() {
+            // Si no tenemos la llave guardada, la pedimos
+            if (!apiKey) {
+                apiKey = prompt("🔒 MODO SEGURO:\n\nIngresa tu API Key de OpenAI para activar el chat (Solo se guardará en tu navegador):");
+                if (apiKey) {
+                    localStorage.setItem("evyon_api_key", apiKey); // Guardar para el futuro
+                } else {
+                    alert("Se requiere una API Key para usar la inteligencia de EVYON.");
+                    return false;
+                }
+            }
+            return true;
+        }
+
         async function sendMessage() {
+            // 1. Verificar seguridad antes de nada
+            if (!await checkApiKey()) return;
+
             let input = document.getElementById("userInput");
             let text = input.value.trim();
             if (!text) return;
@@ -297,7 +323,7 @@
                         messages: [
                             {
                                 role: "system",
-                                content: `Actúa como un asesor experto en nutrición y rendimiento. Responde siempre en español.`
+                                content: `Actúa como un asesor experto en nutrición y rendimiento deportivo para la institución ${currentUser}. Responde siempre en español.`
                             },
                             { role: "user", content: text }
                         ],
@@ -309,24 +335,32 @@
                 let data = await res.json();
                 removeLoadingIndicator(loadingId);
 
-                appendMessage("EVYON IA", data.choices[0].message.content, "bot-message");
+                if (data.error) {
+                    // Si el error es de autenticación (clave incorrecta o vencida)
+                    if (data.error.code === 'invalid_api_key') {
+                        localStorage.removeItem("evyon_api_key"); // Borramos la clave mala
+                        apiKey = null;
+                        appendMessage("SISTEMA", "❌ Tu API Key es inválida o expiró. Intenta enviar el mensaje de nuevo para ingresarla otra vez.", "bot-message");
+                    } else {
+                        throw new Error(data.error.message);
+                    }
+                } else {
+                    appendMessage("EVYON IA", data.choices[0].message.content, "bot-message");
+                }
 
             } catch (err) {
                 removeLoadingIndicator(loadingId);
-                appendMessage("EVYON IA", "Hubo un error con la API.", "bot-message");
+                console.error(err);
+                appendMessage("EVYON IA", "⚠️ Error de conexión. Verifica tu internet o tu API Key.", "bot-message");
             }
         }
 
         function appendMessage(sender, message, className) {
             let box = document.getElementById("chatBox");
             let div = document.createElement("div");
-
             div.classList.add(className);
             div.innerHTML = `<strong>${sender}:</strong> ${message}`;
-
             box.appendChild(div);
-
-            // Scroll mejorado y corregido
             box.scrollTop = box.scrollHeight;
         }
 
@@ -334,16 +368,13 @@
             const id = "loading-" + Date.now();
             let box = document.getElementById("chatBox");
             let div = document.createElement("div");
-
             div.id = id;
             div.classList.add("bot-message");
             div.style.fontStyle = "italic";
             div.style.color = "#888";
-            div.innerHTML = "Escribiendo...";
-
+            div.innerHTML = "Analizando...";
             box.appendChild(div);
             box.scrollTop = box.scrollHeight;
-
             return id;
         }
 
@@ -358,7 +389,6 @@
                 sendMessage();
             }
         }
-
     </script>
 </body>
 </html>
