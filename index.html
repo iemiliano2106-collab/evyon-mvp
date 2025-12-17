@@ -130,12 +130,10 @@
             margin: 6px 0;
             max-width: 80%;
             font-size: 14px;
-            line-height: 1.5; /* Más espacio entre líneas para leer mejor */
+            line-height: 1.5;
             opacity: 0;
             animation: fadeIn 0.3s forwards;
-            
-            /* 👇 ESTA ES LA CLAVE PARA QUE LAS LISTAS SE VEAN BIEN 👇 */
-            white-space: pre-wrap; 
+            white-space: pre-wrap; /* Mantiene saltos de línea */
         }
 
         @keyframes fadeIn {
@@ -158,10 +156,24 @@
             border-bottom-left-radius: 2px;
         }
 
-        /* Negritas dentro del mensaje del bot */
+        /* --- ESTILOS INTERNOS DEL CHAT --- */
+        
+        /* Negritas */
         .bot-message strong {
-            color: #2e7d32; /* Verde oscuro para resaltar palabras clave */
+            color: #2e7d32;
             font-weight: 700;
+        }
+
+        /* Títulos (Los antiguos hashtags ###) */
+        .chat-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #1b5e20; /* Verde más oscuro */
+            margin-top: 15px;
+            margin-bottom: 5px;
+            display: block;
+            border-bottom: 1px solid #ddd; /* Línea separadora sutil */
+            padding-bottom: 3px;
         }
 
         .input-container {
@@ -241,6 +253,11 @@
                 pass: "gold99",
                 name: "Gold's Gym Norte",
                 welcome: "Bienvenido. Recuerda: No pain, no gain. 🏋️‍♂️ ¿En qué ayudamos hoy?"
+            },
+             "A01825448": {
+                pass: "TEC2106",
+                name: "Iván Emiliano López Vargas",
+                welcome: "¡Hola Borrego! ¿Cómo puedo apoyarte el día de hoy en relación a la nutrición y preparación deportiva?"
             }
         };
 
@@ -333,16 +350,16 @@
                                 content: `Actúa como EVYON, un experto clínico en nutrición deportiva y fisiología del ejercicio asignado a: ${currentUserData.name}.
                                 
                                 TUS REGLAS DE RESPUESTA:
-                                1. **Estructura Visual**: Es VITAL que uses listas y saltos de línea. Nunca escribas bloques gigantes de texto.
-                                2. **Personalidad**: Mezcla rigor científico 🧬 con calidez de coach 🤝.
-                                3. **Formato**: Usa Emojis (🥗, 💪, 🔥) para dar energía. Usa **negritas** para conceptos clave.
+                                1. **Estructura Visual**: Es VITAL que uses listas y saltos de línea.
+                                2. **Formato**: Usa Emojis (🥗, 💪, 🔥) para dar energía. Usa títulos con "###" y negritas con "**".
+                                3. **Personalidad**: Mezcla rigor científico 🧬 con calidez de coach 🤝.
                                 4. **Seguridad**: Prioriza la salud y prevención de lesiones.
                                 
                                 Responde siempre en español.`
                             },
                             { role: "user", content: text }
                         ],
-                        max_tokens: 1000, // Respuesta larga permitida
+                        max_tokens: 1000, 
                         temperature: 0.7
                     })
                 });
@@ -357,7 +374,6 @@
                         appendMessage("SISTEMA", "❌ API Key inválida.", "bot-message");
                     } else { throw new Error(data.error.message); }
                 } else {
-                    // Procesamos la respuesta para que se vea bonita
                     let botText = data.choices[0].message.content;
                     appendMessage("EVYON IA", botText, "bot-message");
                 }
@@ -367,13 +383,19 @@
             }
         }
 
-        // 👇 FUNCIÓN MEJORADA PARA FORMATEAR TEXTO BONITO 👇
+        /* --------------------------
+           TRADUCTOR DE FORMATO (Aquí ocurre la magia)
+        ---------------------------*/
         function formatText(text) {
-            // 1. Convertir negritas markdown (**texto**) a HTML (<b>texto</b>)
-            let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // 1. Convertir ### Título en HTML real (<div class="chat-title">)
+            let formatted = text.replace(/^###\s+(.*$)/gm, '<div class="chat-title">$1</div>');
             
-            // 2. Convertir listas (guiones - ) para que se vean mejor (opcional, ya que el CSS pre-wrap lo maneja)
-            // Pero el CSS 'white-space: pre-wrap' ya hace el trabajo pesado de los saltos de línea.
+            // 2. Convertir **negritas** en <strong>
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // 3. Convertir guiones de lista "- " en puntos "• " más bonitos
+            formatted = formatted.replace(/^- (.*)/gm, '• $1');
+
             return formatted;
         }
 
@@ -382,7 +404,7 @@
             let div = document.createElement("div");
             div.classList.add(className);
             
-            // Si es el bot, aplicamos formato bonito. Si es usuario, texto plano.
+            // Si es el bot, pasamos el texto por el "embellecedor"
             if (className === 'bot-message') {
                 div.innerHTML = `<strong>${sender}:</strong> ${formatText(message)}`;
             } else {
