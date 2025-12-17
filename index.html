@@ -130,9 +130,12 @@
             margin: 6px 0;
             max-width: 80%;
             font-size: 14px;
-            line-height: 1.4;
+            line-height: 1.5; /* Más espacio entre líneas para leer mejor */
             opacity: 0;
             animation: fadeIn 0.3s forwards;
+            
+            /* 👇 ESTA ES LA CLAVE PARA QUE LAS LISTAS SE VEAN BIEN 👇 */
+            white-space: pre-wrap; 
         }
 
         @keyframes fadeIn {
@@ -153,6 +156,12 @@
             align-self: flex-start;
             text-align: left;
             border-bottom-left-radius: 2px;
+        }
+
+        /* Negritas dentro del mensaje del bot */
+        .bot-message strong {
+            color: #2e7d32; /* Verde oscuro para resaltar palabras clave */
+            font-weight: 700;
         }
 
         .input-container {
@@ -185,7 +194,6 @@
 
 <body>
 
-    <!-- LOGIN -->
     <div class="app-card" id="login-screen">
         <div class="login-logo">EVYON IA 🔒</div>
         <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;">Acceso Institucional</p>
@@ -197,7 +205,6 @@
         <button class="login-btn" onclick="attemptLogin()">INGRESAR</button>
     </div>
 
-    <!-- CHAT -->
     <div class="app-card" id="chat-interface">
         <div class="chat-header">
             <span>EVYON IA 🤖</span>
@@ -217,44 +224,36 @@
            CONFIGURACIÓN Y BASE DE DATOS
         ---------------------------*/
         let apiKey = localStorage.getItem("evyon_api_key");
-        let currentUserData = null; // Ahora guardaremos toda la info del usuario
+        let currentUserData = null;
 
-        // 👇 AQUÍ EDITAS TUS USUARIOS Y MENSAJES 👇
         const INSTITUTION_DB = {
             "tec": { 
                 pass: "TEC2106",
                 name: "A01825448_Iván Emiliano López Vargas",
-                welcome: "¡Hola Borrego! ¿Cómo puedo apoyarte el día de hoy en relación a la nutrición y preparación deportiva?"
+                welcome: "¡Hola Borrego! 🐏 Soy EVYON. ¿Cómo puedo apoyarte hoy en tu nutrición y rendimiento deportivo?"
             },
             "oxigeno": {
                 pass: "oxi123",
                 name: "Gimnasio Oxígeno",
-                welcome: "¡Hola equipo Oxígeno! Listos para optimizar la nutrición de sus atletas."
+                welcome: "¡Hola equipo Oxígeno! 💪 Listos para optimizar la nutrición de sus atletas."
             },
             "goldgym": {
                 pass: "gold99",
                 name: "Gold's Gym Norte",
-                welcome: "Bienvenido. Recuerda: No pain, no gain. ¿En qué ayudamos a tus socios hoy?"
-            },
-            "cruzazul": {
-                pass: "azul2025",
-                name: "Club Deportivo Cruz Azul",
-                welcome: "Saludos al equipo médico. EVYON está listo para asistir en el rendimiento."
+                welcome: "Bienvenido. Recuerda: No pain, no gain. 🏋️‍♂️ ¿En qué ayudamos hoy?"
             }
         };
 
         /* --------------------------
-           LÓGICA DE LOGIN MEJORADA
+           LÓGICA DE LOGIN
         ---------------------------*/
         function attemptLogin() {
-            // Convertimos a minúsculas para que no importe si escriben "Admin" o "admin"
             const userKey = document.getElementById("username").value.trim().toLowerCase();
             const passInput = document.getElementById("password").value.trim();
             const errorMsg = document.getElementById("loginError");
 
-            // Verificamos si el usuario existe Y si la contraseña coincide
             if (INSTITUTION_DB[userKey] && INSTITUTION_DB[userKey].pass === passInput) {
-                currentUserData = INSTITUTION_DB[userKey]; // Guardamos quién entró
+                currentUserData = INSTITUTION_DB[userKey];
                 errorMsg.style.opacity = "0";
                 transitionToChat();
             } else {
@@ -271,21 +270,16 @@
 
             setTimeout(() => { chat.style.opacity = "1"; }, 50);
 
-            // 👇 AQUÍ USAMOS EL MENSAJE PERSONALIZADO 👇
             if(document.getElementById("chatBox").children.length === 0){
                  appendMessage(
                     "EVYON IA",
-                    `<b>${currentUserData.welcome}</b><br><br>Soy tu asistente virtual.`, 
+                    `<b>${currentUserData.welcome}</b><br><br>Estoy listo para ayudarte.`, 
                     "bot-message"
                 );
             }
-
             setTimeout(() => document.getElementById("userInput").focus(), 300);
         }
 
-        /* --------------------------
-           RESTO DEL CÓDIGO (Igual que antes)
-        ---------------------------*/
         function logout() { location.reload(); }
 
         function shakeModal() {
@@ -310,6 +304,9 @@
             return true;
         }
 
+        /* --------------------------
+           LÓGICA DEL CHAT
+        ---------------------------*/
         async function sendMessage() {
             if (!await checkApiKey()) return;
 
@@ -333,12 +330,20 @@
                         messages: [
                             {
                                 role: "system",
-                                // Personalizamos también cómo se comporta la IA según la institución
-                                content: `Eres un experto en deporte asesorando a: ${currentUserData.name}. Responde en español, sé breve y profesional.`
+                                content: `Actúa como EVYON, un experto clínico en nutrición deportiva y fisiología del ejercicio asignado a: ${currentUserData.name}.
+                                
+                                TUS REGLAS DE RESPUESTA:
+                                1. **Estructura Visual**: Es VITAL que uses listas y saltos de línea. Nunca escribas bloques gigantes de texto.
+                                2. **Personalidad**: Mezcla rigor científico 🧬 con calidez de coach 🤝.
+                                3. **Formato**: Usa Emojis (🥗, 💪, 🔥) para dar energía. Usa **negritas** para conceptos clave.
+                                4. **Seguridad**: Prioriza la salud y prevención de lesiones.
+                                
+                                Responde siempre en español.`
                             },
                             { role: "user", content: text }
                         ],
-                        max_tokens: 150
+                        max_tokens: 1000, // Respuesta larga permitida
+                        temperature: 0.7
                     })
                 });
 
@@ -352,7 +357,9 @@
                         appendMessage("SISTEMA", "❌ API Key inválida.", "bot-message");
                     } else { throw new Error(data.error.message); }
                 } else {
-                    appendMessage("EVYON IA", data.choices[0].message.content, "bot-message");
+                    // Procesamos la respuesta para que se vea bonita
+                    let botText = data.choices[0].message.content;
+                    appendMessage("EVYON IA", botText, "bot-message");
                 }
             } catch (err) {
                 removeLoadingIndicator(loadingId);
@@ -360,11 +367,28 @@
             }
         }
 
+        // 👇 FUNCIÓN MEJORADA PARA FORMATEAR TEXTO BONITO 👇
+        function formatText(text) {
+            // 1. Convertir negritas markdown (**texto**) a HTML (<b>texto</b>)
+            let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // 2. Convertir listas (guiones - ) para que se vean mejor (opcional, ya que el CSS pre-wrap lo maneja)
+            // Pero el CSS 'white-space: pre-wrap' ya hace el trabajo pesado de los saltos de línea.
+            return formatted;
+        }
+
         function appendMessage(sender, message, className) {
             let box = document.getElementById("chatBox");
             let div = document.createElement("div");
             div.classList.add(className);
-            div.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            
+            // Si es el bot, aplicamos formato bonito. Si es usuario, texto plano.
+            if (className === 'bot-message') {
+                div.innerHTML = `<strong>${sender}:</strong> ${formatText(message)}`;
+            } else {
+                div.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            }
+
             box.appendChild(div);
             box.scrollTop = box.scrollHeight;
         }
