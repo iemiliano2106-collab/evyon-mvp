@@ -133,7 +133,7 @@
             line-height: 1.5;
             opacity: 0;
             animation: fadeIn 0.3s forwards;
-            white-space: pre-wrap; /* Mantiene saltos de línea */
+            white-space: pre-wrap; 
         }
 
         @keyframes fadeIn {
@@ -158,22 +158,20 @@
 
         /* --- ESTILOS INTERNOS DEL CHAT --- */
         
-        /* Negritas */
         .bot-message strong {
             color: #2e7d32;
             font-weight: 700;
         }
 
-        /* Títulos (Los antiguos hashtags ###) */
+        /* Títulos (Sin línea abajo) */
         .chat-title {
             font-size: 1.1em;
             font-weight: bold;
-            color: #1b5e20; /* Verde más oscuro */
-            margin-top: 15px;
+            color: #1b5e20; 
+            margin-top: 20px; /* Un poco más de espacio arriba */
             margin-bottom: 5px;
             display: block;
-            border-bottom: 1px solid #ddd; /* Línea separadora sutil */
-            padding-bottom: 3px;
+            /* SE ELIMINÓ EL BORDER-BOTTOM DE AQUÍ */
         }
 
         .input-container {
@@ -384,16 +382,19 @@
         }
 
         /* --------------------------
-           TRADUCTOR DE FORMATO (Aquí ocurre la magia)
+           TRADUCTOR DE FORMATO MEJORADO
         ---------------------------*/
         function formatText(text) {
-            // 1. Convertir ### Título en HTML real (<div class="chat-title">)
-            let formatted = text.replace(/^###\s+(.*$)/gm, '<div class="chat-title">$1</div>');
+            // 1. ELIMINAR LOS GUIONES SEPARADORES "---"
+            let formatted = text.replace(/^\s*---\s*$/gm, '');
+
+            // 2. Convertir ### Título en HTML real (<div class="chat-title">)
+            formatted = formatted.replace(/^###\s+(.*$)/gm, '<div class="chat-title">$1</div>');
             
-            // 2. Convertir **negritas** en <strong>
+            // 3. Convertir **negritas** en <strong>
             formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
             
-            // 3. Convertir guiones de lista "- " en puntos "• " más bonitos
+            // 4. Convertir guiones de lista "- " en puntos "• "
             formatted = formatted.replace(/^- (.*)/gm, '• $1');
 
             return formatted;
@@ -404,7 +405,6 @@
             let div = document.createElement("div");
             div.classList.add(className);
             
-            // Si es el bot, pasamos el texto por el "embellecedor"
             if (className === 'bot-message') {
                 div.innerHTML = `<strong>${sender}:</strong> ${formatText(message)}`;
             } else {
