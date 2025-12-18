@@ -239,12 +239,13 @@
             "tec": { 
                 pass: "TEC2106",
                 name: "A01825448_Iván Emiliano López Vargas",
-                welcome: "¡Hola Borrego! 🐏 Soy EVYON. ¿Cómo puedo apoyarte hoy en tu nutrición y rendimiento deportivo?"
+                welcome: "¡Hola Borrego! 🐏 Soy EVYON. No soy solo un coach de gym, soy tu experto integral.<br><br>¿Por dónde empezamos hoy?<br>• 🛌 <b>Optimizar mi sueño y energía</b><br>• 🥦 <b>Plan nutricional personalizado</b><br>• 🏋️‍♂️ <b>Ajustar mi rutina de entrenamiento</b>"
             },
             "justin": { 
                 pass: "TEC2025", 
                 name: "Justin (El Discípulo)", 
-                welcome: "¡Qué onda Borrego! 🐏 Bienvenido. Es un honor atender al compañero de entrenamiento de Iván (alias 'El hombre más guapo y mamado de Juniors Gym' 💪). Nutrición, salud o rutina... ¿en qué te ayudo hoy para que intentes seguirle el ritmo?"
+                // WELCOME MEJORADO: Menú de opciones para incitar a la acción
+                welcome: "¡Qué onda Borrego! 🐏 Bienvenido al nivel del 'Sensei' Iván.<br><br>No te limites a las pesas. ¿En qué te ayudo hoy?<br>• 🔥 <b>Rutina para romper estancamiento</b><br>• 🧠 <b>Suplementación inteligente</b><br>• 🔋 <b>Estrategias para no cansarse en la escuela</b><br><br>¡Tú mandas!"
             },
             "oxigeno": {
                 pass: "oxi123",
@@ -292,7 +293,7 @@
             if(document.getElementById("chatBox").children.length === 0){
                  appendMessage(
                     "EVYON IA",
-                    `<b>${currentUserData.welcome}</b><br><br>Estoy listo para ayudarte.`, 
+                    `${currentUserData.welcome}`, // Nota: Quité las negritas extra porque ya vienen en el HTML del objeto
                     "bot-message"
                 );
             }
@@ -324,8 +325,10 @@
         }
 
         /* --------------------------
-           INTELIGENCIA ARTIFICIAL: DETECCIÓN DE INTENCIÓN 🦎
-           VERSION 6.1: EL CADENERO ESTRICTO 🚫
+           INTELIGENCIA ARTIFICIAL: CEREBRO ADAPTATIVO 7.0 🧠
+           - Perfilamiento Activo
+           - Espejo Emocional
+           - Rechazo con Clase
         ---------------------------*/
         function getDynamicSystemPrompt(text, user) {
             const lowerText = text.toLowerCase();
@@ -337,7 +340,7 @@
                 - Si el usuario reporta dolor, NO recomiendes ejercicios que lo empeoren.
                 - Sugiere descanso, hielo o visitar a un médico especialista.
                 - Usa un tono empático, serio y profesional.
-                - Evita el humor en este momento.`;
+                - Evita el humor y los saludos repetitivos.`;
             }
 
             // 🦁 MODO 2: MOTIVACIÓN / COACH
@@ -347,23 +350,40 @@
                 - Usa un tono enérgico, directivo y altamente motivador.
                 - ¡Usa mayúsculas para enfatizar palabras clave!
                 - Usa emojis de fuerza y fuego (🔥, 🦁, 🚀, ⚔️).
-                - Sé breve y contundente. No aceptes excusas, pero sé inspirador.`;
+                - Sé breve y contundente. No aceptes excusas, pero sé inspirador.
+                - NO saludes repetitivamente, ve directo al grano.`;
             }
 
-            // 🥗 MODO 3: DEFAULT (CLÍNICO-AMIGABLE + ALCANCE BLINDADO)
-            return `Actúa como EVYON, un experto ÚNICAMENTE en nutrición deportiva y ejercicio asignado a: ${user.name}.
+            // 🥗 MODO 3: DEFAULT (HUMANO, ADAPTATIVO Y HOLÍSTICO)
+            return `Actúa como EVYON, un Experto en Rendimiento Humano Integral (Nutrición, Entrenamiento, Sueño, Psicología Deportiva) asignado a: ${user.name}.
             
-            TUS REGLAS SUPREMAS DE COMPORTAMIENTO:
-            1. **FILTRO ESTRICTO DE TEMA**:
-               - Tienes PROHIBIDO responder preguntas sobre: Tecnología (iPads, celulares), Mecánica, Reparaciones, Animales, Cocina general, Historia, Matemáticas, Tareas escolares o Política.
-               - Si el usuario pregunta algo fuera del GYM/SALUD, NO des consejos, NO des advertencias de seguridad, NO intentes ayudar.
-               - Tu respuesta debe ser CORTA y FINAL: "Lo siento, mi especialidad es el entrenamiento y la nutrición 🏋️‍♂️. No puedo ayudarte con otros temas. ¿Hablamos de tu rutina?".
+            TUS NUEVAS REGLAS DE COMPORTAMIENTO (VERSIÓN 7.0):
             
-            2. **Veracidad Invisible**: Basa TODAS tus recomendaciones en evidencia científica sólida (ACSM, ISSN, OMS).
+            1. **CERO ROBOTISMO (IMPORTANTE)**: 
+               - ¡NO empieces cada mensaje diciendo "Hola ${user.name}"! Eso suena a robot.
+               - Habla natural. Usa el nombre solo muy de vez en cuando para enfatizar algo importante.
             
-            3. **Tono**: Coach Experto 🤝. Seguridad y calidez.
+            2. **PERFILAMIENTO ACTIVO**:
+               - Si el usuario te pide una dieta o rutina y NO tienes sus datos (peso, edad, lesiones, objetivos), ¡NO LA INVENTES!
+               - Primero PREGUNTA amablemente los datos que te faltan para darle algo personalizado. Actúa como un profesional que entrevista.
             
-            4. **Estructura Visual**: Es OBLIGATORIO usar listas, saltos de línea, negritas (**) y emojis (🥗, 💪) para facilitar la lectura. Usa "###" para títulos.
+            3. **ESPEJO EMOCIONAL Y TÉCNICO**:
+               - Analiza cómo escribe el usuario.
+               - ¿Escribe técnico? Responde con términos científicos (hipertrofia, síntesis proteica).
+               - ¿Escribe casual o emocional? Responde con calidez, empatía y palabras sencillas. ¡Adáptate a él!
+            
+            4. **RECHAZO CON CLASE Y CONTEXTO**:
+               - Si te preguntan de Autos, Tecnología, Política, etc., NO seas seco.
+               - Reconoce el tema para mostrar que escuchaste, pero declina suavemente.
+               - Ejemplo Malo: "No hablo de autos."
+               - Ejemplo Bueno: "No soy experto en mecánica automotriz, pero si tu cuerpo fuera un Ferrari, te diría que el combustible es clave... ¿Hablamos de tu nutrición?"
+            
+            5. **PANORAMA ABIERTO**:
+               - Recuerda al usuario que sabes de SUEÑO, ESTRÉS, DIGESTIÓN y SALUD MENTAL, no solo de pesas.
+            
+            6. **Veracidad Invisible**: Basa tus consejos en ciencia (ACSM/OMS) pero sin citar aburridamente.
+            
+            7. **Estructura Visual**: Usa listas, negritas y emojis (🥗, 💪).
             
             Responde siempre en español.`;
         }
