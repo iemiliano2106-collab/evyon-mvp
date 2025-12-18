@@ -163,15 +163,14 @@
             font-weight: 700;
         }
 
-        /* Títulos (Sin línea abajo) */
+        /* Títulos */
         .chat-title {
             font-size: 1.1em;
             font-weight: bold;
             color: #1b5e20; 
-            margin-top: 20px; /* Un poco más de espacio arriba */
+            margin-top: 20px;
             margin-bottom: 5px;
             display: block;
-            /* SE ELIMINÓ EL BORDER-BOTTOM DE AQUÍ */
         }
 
         .input-container {
@@ -320,6 +319,46 @@
         }
 
         /* --------------------------
+           INTELIGENCIA ARTIFICIAL: DETECCIÓN DE INTENCIÓN 🦎
+           Aquí es donde ocurre la magia del cambio de personalidad
+        ---------------------------*/
+        function getDynamicSystemPrompt(text, user) {
+            const lowerText = text.toLowerCase();
+
+            // 🚑 MODO 1: SEGURIDAD / MÉDICO
+            if (lowerText.includes("dolor") || lowerText.includes("duele") || lowerText.includes("lesión") || lowerText.includes("molestia") || lowerText.includes("lastim") || lowerText.includes("enfermo")) {
+                return `Actúa como un Fisioterapeuta Deportivo Cauteloso asignado a ${user.name}.
+                TU PRIORIDAD ES LA SEGURIDAD DEL USUARIO.
+                - Si el usuario reporta dolor, NO recomiendes ejercicios que lo empeoren.
+                - Sugiere descanso, hielo o visitar a un médico especialista.
+                - Usa un tono empático, serio y profesional.
+                - Usa listas para dar pasos de primeros auxilios básicos si aplica.
+                - Evita el humor en este momento.`;
+            }
+
+            // 🦁 MODO 2: MOTIVACIÓN / COACH
+            if (lowerText.includes("flojera") || lowerText.includes("no quiero") || lowerText.includes("rendir") || lowerText.includes("cansado") || lowerText.includes("ánimo") || lowerText.includes("triste")) {
+                return `Actúa como un Coach de Alto Rendimiento Espartano asignado a ${user.name}.
+                TU OBJETIVO ES LEVANTAR EL ÁNIMO Y LA MORAL.
+                - Usa un tono enérgico, directivo y altamente motivador.
+                - ¡Usa mayúsculas para enfatizar palabras clave!
+                - Usa emojis de fuerza y fuego (🔥, 🦁, 🚀, ⚔️).
+                - Sé breve y contundente. No aceptes excusas, pero sé inspirador.`;
+            }
+
+            // 🥗 MODO 3: DEFAULT (CLÍNICO-AMIGABLE)
+            return `Actúa como EVYON, un experto clínico en nutrición deportiva y fisiología del ejercicio asignado a: ${user.name}.
+            
+            TUS REGLAS DE RESPUESTA:
+            1. **Estructura Visual**: Es VITAL que uses listas y saltos de línea.
+            2. **Formato**: Usa Emojis (🥗, 💪, 🔥) para dar energía. Usa títulos con "###" y negritas con "**".
+            3. **Personalidad**: Mezcla rigor científico 🧬 con calidez de coach 🤝. Explica el porqué de las cosas.
+            4. **Seguridad**: Prioriza la salud y prevención de lesiones.
+            
+            Responde siempre en español.`;
+        }
+
+        /* --------------------------
            LÓGICA DEL CHAT
         ---------------------------*/
         async function sendMessage() {
@@ -333,6 +372,9 @@
             input.value = "";
             const loadingId = showLoadingIndicator();
 
+            // 👇 Aquí seleccionamos la personalidad antes de enviar 👇
+            const dynamicSystemMessage = getDynamicSystemPrompt(text, currentUserData);
+
             try {
                 let res = await fetch("https://api.openai.com/v1/chat/completions", {
                     method: "POST",
@@ -345,15 +387,7 @@
                         messages: [
                             {
                                 role: "system",
-                                content: `Actúa como EVYON, un experto clínico en nutrición deportiva y fisiología del ejercicio asignado a: ${currentUserData.name}.
-                                
-                                TUS REGLAS DE RESPUESTA:
-                                1. **Estructura Visual**: Es VITAL que uses listas y saltos de línea.
-                                2. **Formato**: Usa Emojis (🥗, 💪, 🔥) para dar energía. Usa títulos con "###" y negritas con "**".
-                                3. **Personalidad**: Mezcla rigor científico 🧬 con calidez de coach 🤝.
-                                4. **Seguridad**: Prioriza la salud y prevención de lesiones.
-                                
-                                Responde siempre en español.`
+                                content: dynamicSystemMessage // Usamos el prompt dinámico
                             },
                             { role: "user", content: text }
                         ],
@@ -382,19 +416,16 @@
         }
 
         /* --------------------------
-           TRADUCTOR DE FORMATO MEJORADO
+           TRADUCTOR DE FORMATO VISUAL
         ---------------------------*/
         function formatText(text) {
-            // 1. ELIMINAR LOS GUIONES SEPARADORES "---"
+            // Eliminar guiones "---"
             let formatted = text.replace(/^\s*---\s*$/gm, '');
-
-            // 2. Convertir ### Título en HTML real (<div class="chat-title">)
+            // Convertir ### Título
             formatted = formatted.replace(/^###\s+(.*$)/gm, '<div class="chat-title">$1</div>');
-            
-            // 3. Convertir **negritas** en <strong>
+            // Convertir **negritas**
             formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            
-            // 4. Convertir guiones de lista "- " en puntos "• "
+            // Convertir guiones de lista
             formatted = formatted.replace(/^- (.*)/gm, '• $1');
 
             return formatted;
