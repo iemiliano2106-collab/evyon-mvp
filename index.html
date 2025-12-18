@@ -320,7 +320,6 @@
 
         /* --------------------------
            INTELIGENCIA ARTIFICIAL: DETECCIÓN DE INTENCIÓN 🦎
-           Ahora con "Veracidad Invisible" en el modo Default
         ---------------------------*/
         function getDynamicSystemPrompt(text, user) {
             const lowerText = text.toLowerCase();
@@ -347,7 +346,6 @@
             }
 
             // 🥗 MODO 3: DEFAULT (CLÍNICO-AMIGABLE + VERACIDAD INVISIBLE)
-            // Aquí está la magia que pediste: Ciencia por dentro, Coach por fuera.
             return `Actúa como EVYON, un experto en nutrición deportiva y fisiología del ejercicio asignado a: ${user.name}.
             
             TUS REGLAS DE ORO:
@@ -417,13 +415,22 @@
         }
 
         /* --------------------------
-           TRADUCTOR DE FORMATO VISUAL
+           TRADUCTOR DE FORMATO VISUAL MEJORADO (FILTRO UNIVERSAL)
+           ⚠️ AQUÍ ESTÁ EL ARREGLO DE LOS HASHTAGS ⚠️
         ---------------------------*/
         function formatText(text) {
+            // Eliminar guiones "---"
             let formatted = text.replace(/^\s*---\s*$/gm, '');
-            formatted = formatted.replace(/^###\s+(.*$)/gm, '<div class="chat-title">$1</div>');
+
+            // ARREGLO FINAL: Detecta ###, ##, # y aunque tengan espacios antes.
+            // La expresión /^\s*#{1,6}\s+(.*$)/gm es el "Cazafantasmas" de hashtags
+            formatted = formatted.replace(/^\s*#{1,6}\s+(.*$)/gm, '<div class="chat-title">$1</div>');
+            
+            // Convertir **negritas**
             formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // Convertir guiones de lista
             formatted = formatted.replace(/^- (.*)/gm, '• $1');
+
             return formatted;
         }
 
