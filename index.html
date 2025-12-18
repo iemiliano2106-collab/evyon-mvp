@@ -163,7 +163,7 @@
             font-weight: 700;
         }
 
-        /* Títulos */
+        /* Títulos (Sin línea abajo) */
         .chat-title {
             font-size: 1.1em;
             font-weight: bold;
@@ -320,7 +320,7 @@
 
         /* --------------------------
            INTELIGENCIA ARTIFICIAL: DETECCIÓN DE INTENCIÓN 🦎
-           Aquí es donde ocurre la magia del cambio de personalidad
+           Ahora con "Veracidad Invisible" en el modo Default
         ---------------------------*/
         function getDynamicSystemPrompt(text, user) {
             const lowerText = text.toLowerCase();
@@ -346,14 +346,15 @@
                 - Sé breve y contundente. No aceptes excusas, pero sé inspirador.`;
             }
 
-            // 🥗 MODO 3: DEFAULT (CLÍNICO-AMIGABLE)
-            return `Actúa como EVYON, un experto clínico en nutrición deportiva y fisiología del ejercicio asignado a: ${user.name}.
+            // 🥗 MODO 3: DEFAULT (CLÍNICO-AMIGABLE + VERACIDAD INVISIBLE)
+            // Aquí está la magia que pediste: Ciencia por dentro, Coach por fuera.
+            return `Actúa como EVYON, un experto en nutrición deportiva y fisiología del ejercicio asignado a: ${user.name}.
             
-            TUS REGLAS DE RESPUESTA:
-            1. **Estructura Visual**: Es VITAL que uses listas y saltos de línea.
-            2. **Formato**: Usa Emojis (🥗, 💪, 🔥) para dar energía. Usa títulos con "###" y negritas con "**".
-            3. **Personalidad**: Mezcla rigor científico 🧬 con calidez de coach 🤝. Explica el porqué de las cosas.
-            4. **Seguridad**: Prioriza la salud y prevención de lesiones.
+            TUS REGLAS DE ORO:
+            1. **Veracidad Invisible**: Basa TODAS tus recomendaciones en evidencia científica sólida (ACSM, ISSN, OMS), pero NO cites los estudios ni uses lenguaje académico denso a menos que el usuario te lo pida explícitamente.
+            2. **Tono**: Habla como un Coach Experto 🤝. Muestra seguridad y calidez. Haz que la ciencia suene fácil.
+            3. **Estructura Visual**: Es OBLIGATORIO usar listas, saltos de línea, negritas (**) y emojis (🥗, 💪) para facilitar la lectura. Usa "###" para títulos.
+            4. **Seguridad**: Prioriza la salud metabólica. Si algo requiere un médico, dilo abiertamente.
             
             Responde siempre en español.`;
         }
@@ -372,7 +373,7 @@
             input.value = "";
             const loadingId = showLoadingIndicator();
 
-            // 👇 Aquí seleccionamos la personalidad antes de enviar 👇
+            // 👇 Selección de personalidad
             const dynamicSystemMessage = getDynamicSystemPrompt(text, currentUserData);
 
             try {
@@ -387,7 +388,7 @@
                         messages: [
                             {
                                 role: "system",
-                                content: dynamicSystemMessage // Usamos el prompt dinámico
+                                content: dynamicSystemMessage 
                             },
                             { role: "user", content: text }
                         ],
@@ -419,15 +420,10 @@
            TRADUCTOR DE FORMATO VISUAL
         ---------------------------*/
         function formatText(text) {
-            // Eliminar guiones "---"
             let formatted = text.replace(/^\s*---\s*$/gm, '');
-            // Convertir ### Título
             formatted = formatted.replace(/^###\s+(.*$)/gm, '<div class="chat-title">$1</div>');
-            // Convertir **negritas**
             formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            // Convertir guiones de lista
             formatted = formatted.replace(/^- (.*)/gm, '• $1');
-
             return formatted;
         }
 
