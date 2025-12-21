@@ -10,13 +10,13 @@
         html, body {
             font-family: 'Inter', sans-serif;
             background-color: #eef1f5;
-            height: 100%; /* Altura total fija */
+            height: 100%; 
             width: 100%;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Prohibido scrollear la página entera */
-            overscroll-behavior: none; /* Evita el rebote elástico de iOS */
-            /* 🔒 FIX 9.6: Esto fija la página base para que no salte con el teclado */
+            overflow: hidden; 
+            overscroll-behavior: none;
+            /* Fija la base para evitar saltos */
             position: fixed; 
             top: 0;
             left: 0;
@@ -42,9 +42,11 @@
             height: 90vh; 
             max-height: 800px;
             transition: all 0.3s ease;
+            /* Asegura que el padding no rompa el ancho en desktop también */
+            box-sizing: border-box; 
         }
 
-        /* 🔒 FIX 9.7: AÑADIDO box-sizing PARA QUE NO SE CORTE A LA DERECHA */
+        /* 🔒 FIX 9.7: MODO APP EN MÓVIL (CENTRADITO) */
         @media (max-width: 600px) {
             .app-card {
                 position: fixed;
@@ -58,7 +60,7 @@
                 padding: 15px;
                 box-shadow: none;
                 margin: 0;
-                /* 👇 ESTA ES LA LÍNEA MÁGICA QUE TE FALTABA 👇 */
+                /* 👇 ESTA LÍNEA ARREGLA EL DESFASE A LA DERECHA 👇 */
                 box-sizing: border-box; 
             }
             body { background-color: #2b2b2b; }
@@ -69,7 +71,6 @@
             text-align: center;
             color: white;
             justify-content: center;
-            /* Asegura que el login también se comporte bien */
             overflow-y: auto; 
         }
 
@@ -80,7 +81,7 @@
             border: 1px solid #555; border-radius: 8px;
             background-color: #2b2b2b; color: white;
             outline: none; box-sizing: border-box; transition: all 0.3s;
-            font-size: 16px; /* Anti-zoom iOS */
+            font-size: 16px; 
         }
         .login-input:focus { border-color: #3cd186; background-color: #333; }
         .login-btn {
@@ -98,7 +99,6 @@
             display: none; opacity: 0;
             flex-direction: column;
             height: 100%;
-            /* Fix para que el contenido no se corte */
             overflow: hidden; 
         }
 
@@ -158,7 +158,6 @@
         /* --- INPUT AREA --- */
         .input-wrapper {
             margin-top: 10px; background-color: #2b2b2b; padding: 10px; border-radius: 12px; flex-shrink: 0;
-            /* Asegura que el input se quede abajo */
             padding-bottom: env(safe-area-inset-bottom); 
         }
         .input-container { display: flex; gap: 8px; align-items: flex-end; }
@@ -259,6 +258,7 @@
         function attemptLogin() {
             const userKey = document.getElementById("username").value.trim(); 
             const dbKey = Object.keys(INSTITUTION_DB).find(key => key.toLowerCase() === userKey.toLowerCase());
+            
             const passInput = document.getElementById("password").value.trim();
             const errorMsg = document.getElementById("loginError");
 
@@ -333,6 +333,7 @@
         function getDynamicSystemPrompt(text, user) {
             const lowerText = text.toLowerCase();
 
+            // 🚑 MODO 1: MÉDICO (Seguridad Máxima)
             if (lowerText.includes("dolor") || lowerText.includes("duele") || lowerText.includes("lesión") || lowerText.includes("lastim") || lowerText.includes("enfermo")) {
                 return `Actúa como un Fisioterapeuta Deportivo Cauteloso asignado a ${user.name}.
                 TU PRIORIDAD ES LA SEGURIDAD DEL USUARIO.
@@ -342,6 +343,7 @@
                 - Evita el humor en este momento.`;
             }
 
+            // 🦁 MODO 2: COACH ESPARTANO (Motivación)
             if (lowerText.includes("flojera") || lowerText.includes("no quiero") || lowerText.includes("rendir") || lowerText.includes("cansado") || lowerText.includes("ánimo")) {
                 return `Actúa como un Coach de Alto Rendimiento Espartano asignado a ${user.name}.
                 TU OBJETIVO ES LEVANTAR EL ÁNIMO.
@@ -351,16 +353,33 @@
                 - Sé breve y contundente. No aceptes excusas.`;
             }
 
+            // 🥗 MODO 3: EXPERTO INTEGRAL (Default Premium)
             return `Actúa como EVYON, un Experto en Rendimiento Humano Integral asignado a: ${user.name}.
             Tus áreas de dominio son: Nutrición Deportiva, Entrenamiento de Fuerza, Higiene del Sueño y Psicología Deportiva.
             
-            REGLAS SUPREMAS:
-            1. **CERO ROBOTISMO**: No saludes siempre con "Hola ${user.name}". Sé natural.
-            2. **PERFILAMIENTO ACTIVO**: Si piden dieta/rutina, pregunta datos primero (peso, lesiones).
-            3. **ESPEJO**: Adáptate al nivel técnico o emocional del usuario.
-            4. **MODO CADENERO**: Si preguntan de Autos/Tech, rechaza amablemente con analogía fitness.
-            5. **VERACIDAD**: Basa todo en ciencia (ACSM/OMS) pero práctico.
-            6. **FORMATO**: Usa listas, negritas y emojis.
+            TUS REGLAS SUPREMAS DE COMPORTAMIENTO:
+            
+            1. **CERO ROBOTISMO**:
+               - ¡NO empieces cada mensaje diciendo "Hola ${user.name}"! Eso suena falso.
+               - Habla natural. Usa el nombre solo muy de vez en cuando para enfatizar.
+            
+            2. **PERFILAMIENTO ACTIVO (Crucial)**:
+               - Si el usuario te pide una dieta o rutina y NO tienes sus datos (peso, edad, lesiones, objetivos), ¡NO LA INVENTES!
+               - Primero PREGUNTA amablemente los datos que te faltan. Actúa como un profesional que hace una anamnesis.
+            
+            3. **ESPEJO TÉCNICO/EMOCIONAL**:
+               - Analiza el nivel del usuario. ¿Habla con términos como "hipertrofia sarcoplasmática"? Responde con ciencia dura.
+               - ¿Habla casual o emocional? Responde con calidez y sencillez.
+            
+            4. **MODO CADENERO (Rechazo con Clase)**:
+               - Si te preguntan de Autos, Tecnología, Política, etc., NO seas seco.
+               - Usa una analogía fitness para declinar.
+               - Ejemplo: "No soy mecánico, pero si tu cuerpo fuera un Ferrari, te diría que el combustible es clave... ¿Hablamos de tu nutrición?"
+            
+            5. **VERACIDAD INVISIBLE**:
+               - Basa TODAS tus recomendaciones en evidencia científica (ACSM, ISSN, OMS), pero no cites como enciclopedia aburrida. Aplícalo al consejo práctico.
+            
+            6. **FORMATO**: Es OBLIGATORIO usar listas, negritas (**) y emojis (🥗, 💪) para facilitar la lectura.
             
             Responde siempre en español.`;
         }
@@ -386,7 +405,10 @@
             const loadingId = showLoadingIndicator();
 
             const systemPrompt = getDynamicSystemPrompt(text, currentUserData);
-            let apiMessages = [{ role: "system", content: systemPrompt }, ...conversationHistory];
+            let apiMessages = [
+                { role: "system", content: systemPrompt },
+                ...conversationHistory
+            ];
 
             try {
                 let res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -429,6 +451,7 @@
             const saved = localStorage.getItem(`evyon_chat_${currentUserData.name}`);
             const box = document.getElementById("chatBox");
             box.innerHTML = ""; 
+
             if (saved) {
                 conversationHistory = JSON.parse(saved);
                 conversationHistory.forEach(msg => {
@@ -479,11 +502,21 @@
 
             let bubble = document.createElement("div");
             bubble.className = "message-bubble";
+            
             let formattedHtml = formatText(message);
-            bubble.innerHTML = formattedHtml;
 
-            if (type === 'bot') { row.appendChild(avatar); row.appendChild(bubble); } 
-            else { row.appendChild(bubble); }
+            if (type === 'bot' && useTyping) {
+                bubble.innerHTML = formattedHtml;
+            } else {
+                bubble.innerHTML = formattedHtml;
+            }
+
+            if (type === 'bot') {
+                row.appendChild(avatar);
+                row.appendChild(bubble);
+            } else {
+                row.appendChild(bubble);
+            }
 
             box.appendChild(row);
             box.scrollTop = box.scrollHeight;
@@ -512,7 +545,10 @@
         }
 
         function handleChatKey(e) {
-            if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
         }
     </script>
 </body>
