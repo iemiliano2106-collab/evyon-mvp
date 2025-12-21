@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EVYON IA - Acceso Institucional</title>
 
     <style>
@@ -15,12 +15,14 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            /* Evita el rebote en iOS */
+            overscroll-behavior: none;
         }
 
         /* --- CONTENEDORES --- */
         .app-card {
             width: 90%;
-            max-width: 420px; /* Un pelín más ancho para mejor lectura */
+            max-width: 420px;
             background-color: #3D3D3D;
             border-radius: 16px;
             padding: 20px;
@@ -28,7 +30,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            height: 90vh; /* Ocupa casi toda la altura en móvil */
+            height: 90vh; 
             max-height: 800px;
         }
 
@@ -37,7 +39,7 @@
             text-align: center;
             color: white;
             padding: 30px 10px;
-            height: auto; /* El login no necesita ser tan alto */
+            height: auto;
             max-height: none;
             justify-content: center;
         }
@@ -60,6 +62,8 @@
             border: 1px solid #555; border-radius: 8px;
             background-color: #2b2b2b; color: white;
             outline: none; box-sizing: border-box; transition: all 0.3s;
+            /* 🔒 FIX ANTI-ZOOM: 16px evita que iOS active la lupa */
+            font-size: 16px; 
         }
         .login-input:focus { border-color: #3cd186; background-color: #333; }
 
@@ -88,7 +92,7 @@
             padding: 15px; border-radius: 12px; margin-bottom: 10px;
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            flex-shrink: 0; /* Para que no se aplaste */
+            flex-shrink: 0; 
         }
 
         .header-actions { display: flex; gap: 10px; }
@@ -103,34 +107,29 @@
         /* --- CHAT BOX & MESSAGES --- */
         .chat-box {
             background-color: #ffffff;
-            flex: 1; /* Ocupa el espacio restante */
+            flex: 1; 
             overflow-y: auto;
             padding: 15px; border-radius: 12px;
             display: flex; flex-direction: column; gap: 15px;
             scroll-behavior: smooth;
+            /* Scroll suave en iOS */
+            -webkit-overflow-scrolling: touch; 
         }
 
-        /* Message Row: Contenedor para Avatar + Burbuja */
         .message-row {
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            max-width: 100%;
+            display: flex; align-items: flex-end; gap: 8px; max-width: 100%;
         }
         .message-row.user { justify-content: flex-end; }
         .message-row.bot { justify-content: flex-start; }
 
-        /* Avatares */
         .avatar {
-            width: 30px; height: 30px;
-            border-radius: 50%;
+            width: 30px; height: 30px; border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
             font-size: 18px; flex-shrink: 0;
         }
         .bot-avatar { background-color: #e0f2f1; border: 1px solid #3cd186; }
         .user-avatar { background-color: #3cd186; color: white; }
 
-        /* Burbujas */
         .message-bubble {
             padding: 12px 16px; border-radius: 14px;
             max-width: 80%; font-size: 15px; line-height: 1.5;
@@ -147,7 +146,6 @@
             border: 1px solid #eee;
         }
 
-        /* Estilos internos del texto */
         .chat-title { font-weight: 800; color: #1b5e20; margin-top: 10px; display: block; }
         strong { font-weight: 700; }
 
@@ -177,7 +175,9 @@
             flex: 1; padding: 10px; border: none; border-radius: 8px;
             outline: none; resize: none; background: white;
             font-family: inherit; min-height: 24px; max-height: 100px;
-            overflow-y: hidden; /* Se expande solo */
+            overflow-y: hidden;
+            /* 🔒 FIX ANTI-ZOOM: 16px es el tamaño mágico para iOS */
+            font-size: 16px; 
         }
 
         .send-btn {
@@ -187,10 +187,8 @@
         }
         .send-btn:hover { background-color: #2eb06d; }
 
-        /* --- DISCLAIMER (LEGAL) --- */
         .disclaimer {
-            font-size: 10px; color: #888; text-align: center;
-            margin-top: 8px;
+            font-size: 10px; color: #888; text-align: center; margin-top: 8px;
         }
 
     </style>
@@ -235,7 +233,7 @@
         ---------------------------*/
         let apiKey = localStorage.getItem("evyon_api_key");
         let currentUserData = null;
-        let conversationHistory = []; // Memoria RAM
+        let conversationHistory = []; 
 
         const INSTITUTION_DB = {
             "tec": { 
@@ -252,9 +250,14 @@
             },
             "gatito": { 
                 pass: "Pachon123", 
-                name: "Gatito ❤️", // <--- Aquí puedes poner su nombre real si prefieres
+                name: "Mi Gatito Pachon ❤️", 
                 welcome: "¡Hola hermoso Gatito Pachon! ❤️ Bienvenida a tu espacio personal en EVYON.\n\nEstoy programado para cuidarte y ayudarte a ponerte más guapa y fuerte. ¿Qué se te antoja hacer hoy?",
-                suggestions: ["🍑 Rutina de Glúteo", "🍫 Snacks saludables", "🧘‍♀️ Yoga para el estrés"]
+                suggestions: ["🍑 Rutina de glúteo", "🍫 Snacks saludables", "🧘‍♀️ Rutina de pierna"]
+            },
+            "oxigeno": {
+                pass: "oxi123", name: "Gimnasio Oxígeno",
+                welcome: "¡Hola equipo Oxígeno! 💪 Listos para optimizar.",
+                suggestions: ["Rutina Hipertrofia", "Déficit Calórico"]
             },
             "a01825448": {
                 pass: "TEC2106", name: "Iván Emiliano López Vargas",
@@ -267,13 +270,16 @@
            LOGIN & INICIO
         ---------------------------*/
         function attemptLogin() {
-            const userKey = document.getElementById("username").value.trim().toLowerCase();
+            const userKey = document.getElementById("username").value.trim(); // Sensitive case removed for safety
+            // Búsqueda insensible a mayúsculas/minúsculas para el usuario
+            const dbKey = Object.keys(INSTITUTION_DB).find(key => key.toLowerCase() === userKey.toLowerCase());
+            
             const passInput = document.getElementById("password").value.trim();
             const errorMsg = document.getElementById("loginError");
 
-            if (INSTITUTION_DB[userKey] && INSTITUTION_DB[userKey].pass === passInput) {
-                currentUserData = INSTITUTION_DB[userKey];
-                localStorage.setItem("evyon_current_user", userKey); // Guardar sesión usuario
+            if (dbKey && INSTITUTION_DB[dbKey].pass === passInput) {
+                currentUserData = INSTITUTION_DB[dbKey];
+                localStorage.setItem("evyon_current_user", dbKey); 
                 errorMsg.style.opacity = "0";
                 transitionToChat();
             } else {
@@ -283,7 +289,6 @@
             }
         }
 
-        // Recuperar sesión si existe
         window.onload = function() {
             const savedUser = localStorage.getItem("evyon_current_user");
             if (savedUser && INSTITUTION_DB[savedUser]) {
@@ -298,8 +303,9 @@
             chat.style.display = "flex";
             setTimeout(() => { chat.style.opacity = "1"; }, 50);
 
-            loadChatHistory(); // Cargar historial guardado
-            setTimeout(() => document.getElementById("userInput").focus(), 300);
+            loadChatHistory();
+            // Retraso el foco para evitar teclado repentino en móviles
+            // setTimeout(() => document.getElementById("userInput").focus(), 300); 
         }
 
         function logout() { 
@@ -312,7 +318,6 @@
                 localStorage.removeItem(`evyon_chat_${currentUserData.name}`);
                 conversationHistory = [];
                 document.getElementById("chatBox").innerHTML = "";
-                // Reiniciar welcome
                 appendMessage("EVYON IA", currentUserData.welcome, "bot", false);
                 renderSuggestions(currentUserData.suggestions);
             }
@@ -361,7 +366,7 @@
         }
 
         /* --------------------------
-           LÓGICA DEL CHAT (Con Persistencia)
+           LÓGICA DEL CHAT
         ---------------------------*/
         async function sendMessage(manualText = null) {
             if (!await checkApiKey()) return;
@@ -370,19 +375,17 @@
             let text = manualText || input.value.trim();
             if (!text) return;
 
-            // 1. Mostrar y guardar usuario
             appendMessage("Tú", text, "user", false);
             saveToHistory("user", text);
             
             input.value = "";
-            input.style.height = "auto"; // Reset altura
+            input.style.height = "auto";
             
             const oldSuggestions = document.querySelector('.suggestions-container');
             if(oldSuggestions) oldSuggestions.remove();
 
             const loadingId = showLoadingIndicator();
 
-            // 2. Preparar API
             const systemPrompt = getDynamicSystemPrompt(text, currentUserData);
             let apiMessages = [
                 { role: "system", content: systemPrompt },
@@ -420,33 +423,25 @@
             }
         }
 
-        /* --------------------------
-           PERSISTENCIA (LOCALSTORAGE)
-        ---------------------------*/
         function saveToHistory(role, content) {
             conversationHistory.push({ role, content });
-            // Limite de memoria RAM (últimos 15)
             if (conversationHistory.length > 15) conversationHistory = conversationHistory.slice(conversationHistory.length - 15);
-            
-            // Guardar en disco
             localStorage.setItem(`evyon_chat_${currentUserData.name}`, JSON.stringify(conversationHistory));
         }
 
         function loadChatHistory() {
             const saved = localStorage.getItem(`evyon_chat_${currentUserData.name}`);
             const box = document.getElementById("chatBox");
-            box.innerHTML = ""; // Limpiar visualmente
+            box.innerHTML = ""; 
 
             if (saved) {
                 conversationHistory = JSON.parse(saved);
-                // Reconstruir chat visualmente
                 conversationHistory.forEach(msg => {
                     const sender = msg.role === 'user' ? "Tú" : "EVYON IA";
                     const cssClass = msg.role === 'user' ? "user" : "bot";
                     appendMessage(sender, msg.content, cssClass, false);
                 });
             } else {
-                // Si es nuevo, poner welcome
                 appendMessage("EVYON IA", currentUserData.welcome, "bot", false);
                 renderSuggestions(currentUserData.suggestions);
             }
@@ -480,37 +475,29 @@
 
         function appendMessage(sender, message, type, useTyping) {
             let box = document.getElementById("chatBox");
-            
-            // Estructura: Row -> Avatar + Bubble
             let row = document.createElement("div");
             row.className = `message-row ${type}`;
 
-            // Avatar
             let avatar = document.createElement("div");
             avatar.className = `avatar ${type}-avatar`;
             avatar.innerHTML = type === 'user' ? '👤' : '🤖';
 
-            // Burbuja
             let bubble = document.createElement("div");
             bubble.className = "message-bubble";
             
             let formattedHtml = formatText(message);
 
             if (type === 'bot' && useTyping) {
-                // Simular typing simple
-                bubble.innerHTML = formattedHtml; // Insertamos directo (animación compleja de texto es riesgosa con HTML rico)
-                // Se podría agregar clase fade-in si se desea
+                bubble.innerHTML = formattedHtml;
             } else {
                 bubble.innerHTML = formattedHtml;
             }
 
-            // Orden visual
             if (type === 'bot') {
                 row.appendChild(avatar);
                 row.appendChild(bubble);
             } else {
-                row.appendChild(bubble); // Usuario a la derecha (avatar opcional, aquí lo quito para limpieza o lo pongo al final)
-                // row.appendChild(avatar); // Descomentar si quieres avatar de usuario a la derecha
+                row.appendChild(bubble);
             }
 
             box.appendChild(row);
