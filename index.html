@@ -9,7 +9,7 @@
         /* --- ESTILOS GENERALES --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #eef1f5; /* Un tono gris más moderno */
+            background-color: #eef1f5;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,19 +17,19 @@
             margin: 0;
         }
 
-        /* --- CONTENEDORES (RESPONSIVE) --- */
+        /* --- CONTENEDORES --- */
         .app-card {
-            width: 90%;          /* Ocupa el 90% en celular */
-            max-width: 400px;    /* Pero no pasa de 400px en PC */
+            width: 90%;
+            max-width: 420px; /* Un pelín más ancho para mejor lectura */
             background-color: #3D3D3D;
             border-radius: 16px;
             padding: 20px;
             box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.4);
             position: relative;
-            transition: opacity 0.5s ease;
             display: flex;
             flex-direction: column;
-            max-height: 90vh; /* Para que no se salga de pantallas chicas */
+            height: 90vh; /* Ocupa casi toda la altura en móvil */
+            max-height: 800px;
         }
 
         /* --- LOGIN SCREEN --- */
@@ -37,6 +37,9 @@
             text-align: center;
             color: white;
             padding: 30px 10px;
+            height: auto; /* El login no necesita ser tan alto */
+            max-height: none;
+            justify-content: center;
         }
 
         .login-logo {
@@ -48,196 +51,147 @@
         }
 
         .login-subtitle {
-            font-size: 13px; 
-            color: #aaa; 
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 13px; color: #aaa; margin-bottom: 30px;
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
         .login-input {
-            width: 100%;
-            padding: 14px;
-            margin: 8px 0;
-            border: 1px solid #555;
-            border-radius: 8px;
-            background-color: #2b2b2b;
-            color: white;
-            outline: none;
-            box-sizing: border-box; /* Para que el padding no rompa el ancho */
-            transition: all 0.3s;
+            width: 100%; padding: 14px; margin: 8px 0;
+            border: 1px solid #555; border-radius: 8px;
+            background-color: #2b2b2b; color: white;
+            outline: none; box-sizing: border-box; transition: all 0.3s;
         }
-
-        .login-input:focus {
-            border-color: #3cd186;
-            background-color: #333;
-        }
+        .login-input:focus { border-color: #3cd186; background-color: #333; }
 
         .login-btn {
-            width: 100%;
-            padding: 14px;
-            margin-top: 20px;
+            width: 100%; padding: 14px; margin-top: 20px;
             background: linear-gradient(90deg, #3cd186, #2eb06d);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            color: white; border: none; border-radius: 8px;
+            font-weight: bold; font-size: 16px; cursor: pointer;
+            transition: transform 0.2s;
         }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(60, 209, 134, 0.3);
-        }
+        .login-btn:hover { transform: translateY(-2px); }
 
         .error-msg {
-            color: #ff6b6b;
-            font-size: 13px;
-            margin-top: 15px;
-            min-height: 20px;
-            opacity: 0;
-            transition: opacity 0.3s;
+            color: #ff6b6b; font-size: 13px; margin-top: 15px; opacity: 0; transition: opacity 0.3s;
         }
 
-        /* --- CHAT --- */
+        /* --- CHAT INTERFACE --- */
         #chat-interface {
-            display: none;
-            opacity: 0;
-            height: 600px; /* Altura fija base */
+            display: none; opacity: 0;
+            flex-direction: column;
+            height: 100%;
         }
 
         .chat-header {
-            background-color: #2b2b2b;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background-color: #2b2b2b; color: white;
+            padding: 15px; border-radius: 12px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex-shrink: 0; /* Para que no se aplaste */
         }
 
-        .logout-btn {
-            font-size: 12px;
-            color: #888;
-            cursor: pointer;
-            background: none;
-            border: none;
-            text-decoration: underline;
+        .header-actions { display: flex; gap: 10px; }
+        
+        .header-btn {
+            font-size: 12px; color: #aaa; cursor: pointer;
+            background: none; border: none; text-decoration: underline;
         }
-        .logout-btn:hover { color: #ff6b6b; }
+        .header-btn:hover { color: white; }
+        .btn-clear:hover { color: #ff6b6b; }
 
+        /* --- CHAT BOX & MESSAGES --- */
         .chat-box {
             background-color: #ffffff;
-            flex: 1; /* Ocupa el espacio disponible */
+            flex: 1; /* Ocupa el espacio restante */
             overflow-y: auto;
-            padding: 15px;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            padding: 15px; border-radius: 12px;
+            display: flex; flex-direction: column; gap: 15px;
             scroll-behavior: smooth;
         }
 
-        /* Scrollbar bonito */
-        .chat-box::-webkit-scrollbar { width: 6px; }
-        .chat-box::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
-
-        .user-message, .bot-message {
-            padding: 12px 16px;
-            border-radius: 14px;
-            max-width: 85%;
-            font-size: 15px;
-            line-height: 1.5;
-            position: relative;
-            word-wrap: break-word;
+        /* Message Row: Contenedor para Avatar + Burbuja */
+        .message-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            max-width: 100%;
         }
+        .message-row.user { justify-content: flex-end; }
+        .message-row.bot { justify-content: flex-start; }
 
-        .user-message {
-            background-color: #3cd186;
-            color: white;
-            align-self: flex-end;
+        /* Avatares */
+        .avatar {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 18px; flex-shrink: 0;
+        }
+        .bot-avatar { background-color: #e0f2f1; border: 1px solid #3cd186; }
+        .user-avatar { background-color: #3cd186; color: white; }
+
+        /* Burbujas */
+        .message-bubble {
+            padding: 12px 16px; border-radius: 14px;
+            max-width: 80%; font-size: 15px; line-height: 1.5;
+            word-wrap: break-word; position: relative;
+        }
+        .user .message-bubble {
+            background-color: #3cd186; color: white;
             border-bottom-right-radius: 2px;
             box-shadow: 0 2px 5px rgba(60, 209, 134, 0.2);
         }
-
-        .bot-message {
-            background-color: #f3f4f6;
-            color: #333;
-            align-self: flex-start;
+        .bot .message-bubble {
+            background-color: #f3f4f6; color: #333;
             border-bottom-left-radius: 2px;
             border: 1px solid #eee;
         }
 
-        /* Estilos internos del bot */
-        .bot-message strong { color: #1a5e3a; font-weight: 700; }
-        .chat-title {
-            font-size: 1.1em;
-            font-weight: 800;
-            color: #1b5e20; 
-            margin-top: 15px;
-            margin-bottom: 5px;
-            display: block;
-        }
+        /* Estilos internos del texto */
+        .chat-title { font-weight: 800; color: #1b5e20; margin-top: 10px; display: block; }
+        strong { font-weight: 700; }
 
-        /* --- SUGGESTION CHIPS (Botones Rápidos) --- */
+        /* --- SUGGESTIONS --- */
         .suggestions-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
+            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
         }
         .suggestion-chip {
-            background-color: white;
-            border: 1px solid #3cd186;
-            color: #3cd186;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: 600;
+            background-color: white; border: 1px solid #3cd186; color: #3cd186;
+            padding: 6px 12px; border-radius: 20px; font-size: 13px;
+            cursor: pointer; font-weight: 600; transition: all 0.2s;
         }
-        .suggestion-chip:hover {
-            background-color: #3cd186;
-            color: white;
+        .suggestion-chip:hover { background-color: #3cd186; color: white; }
+
+        /* --- INPUT AREA --- */
+        .input-wrapper {
+            margin-top: 10px;
+            background-color: #2b2b2b;
+            padding: 10px;
+            border-radius: 12px;
+            flex-shrink: 0;
         }
 
-        /* --- INPUT --- */
-        .input-container {
-            display: flex;
-            margin-top: 15px;
-            gap: 10px;
-        }
+        .input-container { display: flex; gap: 8px; align-items: flex-end; }
 
         .chat-input {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            outline: none;
-            resize: none;
-            height: 50px;
-            font-family: inherit;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            flex: 1; padding: 10px; border: none; border-radius: 8px;
+            outline: none; resize: none; background: white;
+            font-family: inherit; min-height: 24px; max-height: 100px;
+            overflow-y: hidden; /* Se expande solo */
         }
 
         .send-btn {
-            background-color: #3cd186;
-            color: white;
-            border: none;
-            padding: 0 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
+            background-color: #3cd186; color: white; border: none;
+            padding: 10px 15px; border-radius: 8px; cursor: pointer;
+            font-weight: bold; height: 44px;
         }
         .send-btn:hover { background-color: #2eb06d; }
+
+        /* --- DISCLAIMER (LEGAL) --- */
+        .disclaimer {
+            font-size: 10px; color: #888; text-align: center;
+            margin-top: 8px;
+        }
 
     </style>
 </head>
@@ -258,14 +212,20 @@
     <div class="app-card" id="chat-interface">
         <div class="chat-header">
             <span style="display:flex; align-items:center; gap:8px;">🤖 EVYON IA</span>
-            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+            <div class="header-actions">
+                <button class="header-btn btn-clear" onclick="clearChat()">Limpiar Chat</button>
+                <button class="header-btn" onclick="logout()">Salir</button>
+            </div>
         </div>
 
         <div class="chat-box" id="chatBox"></div>
 
-        <div class="input-container">
-            <textarea id="userInput" class="chat-input" placeholder="Escribe aquí..." onkeydown="handleChatKey(event)"></textarea>
-            <button class="send-btn" onclick="sendMessage()">Enviar</button>
+        <div class="input-wrapper">
+            <div class="input-container">
+                <textarea id="userInput" class="chat-input" placeholder="Escribe aquí..." rows="1" oninput="autoResize(this)" onkeydown="handleChatKey(event)"></textarea>
+                <button class="send-btn" onclick="sendMessage()">➤</button>
+            </div>
+            <div class="disclaimer">EVYON es un asistente IA. No sustituye consejo médico profesional.</div>
         </div>
     </div>
 
@@ -275,8 +235,7 @@
         ---------------------------*/
         let apiKey = localStorage.getItem("evyon_api_key");
         let currentUserData = null;
-        // 🧠 MEMORIA: Aquí guardaremos la conversación para que EVYON no olvide
-        let conversationHistory = []; 
+        let conversationHistory = []; // Memoria RAM
 
         const INSTITUTION_DB = {
             "tec": { 
@@ -292,14 +251,12 @@
                 suggestions: ["🔥 Romper estancamiento", "🧠 Suplementación", "🔋 Energía para estudiar"]
             },
             "oxigeno": {
-                pass: "oxi123",
-                name: "Gimnasio Oxígeno",
+                pass: "oxi123", name: "Gimnasio Oxígeno",
                 welcome: "¡Hola equipo Oxígeno! 💪 Listos para optimizar.",
                 suggestions: ["Rutina Hipertrofia", "Déficit Calórico"]
             },
-             "A01825448": {
-                pass: "TEC2106",
-                name: "Iván Emiliano López Vargas",
+            "a01825448": {
+                pass: "TEC2106", name: "Iván Emiliano López Vargas",
                 welcome: "¡Hola Borrego! ¿Cómo puedo apoyarte hoy?",
                 suggestions: ["Análisis de rendimiento", "Dieta Anti-inflamatoria"]
             }
@@ -315,6 +272,7 @@
 
             if (INSTITUTION_DB[userKey] && INSTITUTION_DB[userKey].pass === passInput) {
                 currentUserData = INSTITUTION_DB[userKey];
+                localStorage.setItem("evyon_current_user", userKey); // Guardar sesión usuario
                 errorMsg.style.opacity = "0";
                 transitionToChat();
             } else {
@@ -324,21 +282,40 @@
             }
         }
 
+        // Recuperar sesión si existe
+        window.onload = function() {
+            const savedUser = localStorage.getItem("evyon_current_user");
+            if (savedUser && INSTITUTION_DB[savedUser]) {
+                currentUserData = INSTITUTION_DB[savedUser];
+                transitionToChat();
+            }
+        };
+
         function transitionToChat() {
             document.getElementById("login-screen").style.display = "none";
             const chat = document.getElementById("chat-interface");
-            chat.style.display = "flex"; // Flex para que ocupe altura correcta
+            chat.style.display = "flex";
             setTimeout(() => { chat.style.opacity = "1"; }, 50);
 
-            if(conversationHistory.length === 0){
-                 // Mostrar mensaje de bienvenida + Botones
-                 appendMessage("EVYON IA", currentUserData.welcome, "bot-message", false);
-                 renderSuggestions(currentUserData.suggestions);
-            }
+            loadChatHistory(); // Cargar historial guardado
             setTimeout(() => document.getElementById("userInput").focus(), 300);
         }
 
-        function logout() { location.reload(); }
+        function logout() { 
+            localStorage.removeItem("evyon_current_user");
+            location.reload(); 
+        }
+
+        function clearChat() {
+            if(confirm("¿Borrar toda la conversación?")) {
+                localStorage.removeItem(`evyon_chat_${currentUserData.name}`);
+                conversationHistory = [];
+                document.getElementById("chatBox").innerHTML = "";
+                // Reiniciar welcome
+                appendMessage("EVYON IA", currentUserData.welcome, "bot", false);
+                renderSuggestions(currentUserData.suggestions);
+            }
+        }
 
         function shakeModal() {
             const box = document.getElementById("login-screen");
@@ -363,44 +340,27 @@
         }
 
         /* --------------------------
-           CEREBRO 7.0 (Prompt del Sistema)
+           CEREBRO (PROMPT)
         ---------------------------*/
         function getDynamicSystemPrompt(text, user) {
             const lowerText = text.toLowerCase();
-
-            // 🚑 MODO 1: MÉDICO
-            if (lowerText.includes("dolor") || lowerText.includes("duele") || lowerText.includes("lesión") || lowerText.includes("enfermo")) {
-                return `Actúa como Fisioterapeuta Deportivo Cauteloso para ${user.name}.
-                PRIORIDAD: SEGURIDAD.
-                - Si hay dolor, NO recomiendes ejercicios que lo empeoren.
-                - Sugiere descanso/médico.
-                - Tono serio y empático.`;
+            if (lowerText.includes("dolor") || lowerText.includes("duele") || lowerText.includes("lesión")) {
+                return `Fisioterapeuta Deportivo Cauteloso para ${user.name}. Seguridad ante todo. Si hay dolor, sugiere descanso/médico.`;
             }
-
-            // 🦁 MODO 2: COACH
-            if (lowerText.includes("flojera") || lowerText.includes("no quiero") || lowerText.includes("rendir") || lowerText.includes("cansado")) {
-                return `Actúa como Coach Espartano para ${user.name}.
-                OBJETIVO: LEVANTAR EL ÁNIMO.
-                - Tono enérgico, mayúsculas, emojis fuego (🔥).
-                - Sé breve e inspirador.`;
+            if (lowerText.includes("flojera") || lowerText.includes("no quiero")) {
+                return `Coach Espartano para ${user.name}. Motiva con energía y brevedad.`;
             }
-
-            // 🥗 MODO 3: EXPERTO INTEGRAL (DEFAULT)
-            return `Eres EVYON, Experto en Rendimiento Humano (Nutrición, Entreno, Sueño, Psicología) para: ${user.name}.
-            
-            REGLAS 7.0:
-            1. **NO ROBOT**: No saludes con "Hola ${user.name}" siempre. Sé natural.
-            2. **PERFILAMIENTO**: Si te piden dieta/rutina y no sabes sus datos, PREGUNTA PRIMERO (peso, meta, lesiones).
-            3. **ESPEJO**: Si el usuario es técnico, sé científico. Si es casual, sé cálido.
-            4. **RECHAZO AMABLE**: Si preguntan de Autos/Tecnología, di: "No soy experto en eso, pero si tu cuerpo fuera un auto... ¿Hablamos de salud?".
-            5. **CIENCIA**: Basa todo en ACSM/OMS sin citar aburrido.
-            6. **FORMATO**: Usa listas, negritas y emojis.
-            
-            Responde siempre en español.`;
+            return `Eres EVYON, Experto en Rendimiento Humano (Nutrición, Entreno, Sueño) para: ${user.name}.
+            REGLAS:
+            1. NO saludes con "Hola ${user.name}" siempre.
+            2. PERFILA: Si no tienes datos, pregúntalos.
+            3. ESPEJO: Adáptate al tono (técnico vs emocional).
+            4. RECHAZO: Si preguntan de Autos/Tecnología, di: "No soy experto en eso, pero si tu cuerpo fuera un auto...".
+            5. FORMATO: Listas y negritas.`;
         }
 
         /* --------------------------
-           LÓGICA DEL CHAT (Con Memoria)
+           LÓGICA DEL CHAT (Con Persistencia)
         ---------------------------*/
         async function sendMessage(manualText = null) {
             if (!await checkApiKey()) return;
@@ -409,34 +369,29 @@
             let text = manualText || input.value.trim();
             if (!text) return;
 
-            // 1. Mostrar mensaje usuario
-            appendMessage("Tú", text, "user-message", false);
-            input.value = "";
+            // 1. Mostrar y guardar usuario
+            appendMessage("Tú", text, "user", false);
+            saveToHistory("user", text);
             
-            // Eliminar sugerencias viejas si existen
+            input.value = "";
+            input.style.height = "auto"; // Reset altura
+            
             const oldSuggestions = document.querySelector('.suggestions-container');
             if(oldSuggestions) oldSuggestions.remove();
 
             const loadingId = showLoadingIndicator();
 
-            // 2. Preparar el Cerebro y la Memoria
+            // 2. Preparar API
             const systemPrompt = getDynamicSystemPrompt(text, currentUserData);
-            
-            // Construir el historial para enviar a OpenAI
-            // Siempre ponemos el System Prompt actualizado al principio
             let apiMessages = [
                 { role: "system", content: systemPrompt },
-                ...conversationHistory, // Historial previo
-                { role: "user", content: text } // Mensaje actual
+                ...conversationHistory
             ];
 
             try {
                 let res = await fetch("https://api.openai.com/v1/chat/completions", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${apiKey}`
-                    },
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
                     body: JSON.stringify({
                         model: "gpt-4o-mini",
                         messages: apiMessages,
@@ -449,35 +404,50 @@
                 removeLoadingIndicator(loadingId);
 
                 if (data.error) {
-                    handleApiError(data.error);
+                    if (data.error.code === 'invalid_api_key') {
+                        localStorage.removeItem("evyon_api_key"); apiKey = null;
+                        appendMessage("SISTEMA", "API Key inválida.", "bot", false);
+                    } else { throw new Error(data.error.message); }
                 } else {
                     let botText = data.choices[0].message.content;
-                    
-                    // 3. Guardar en memoria (Usuario + Bot)
-                    conversationHistory.push({ role: "user", content: text });
-                    conversationHistory.push({ role: "assistant", content: botText });
-
-                    // Limitar memoria a últimos 10 mensajes para ahorrar tokens
-                    if (conversationHistory.length > 10) {
-                        conversationHistory = conversationHistory.slice(conversationHistory.length - 10);
-                    }
-
-                    // 4. Mostrar respuesta con efecto Typing
-                    appendMessage("EVYON IA", botText, "bot-message", true);
+                    appendMessage("EVYON IA", botText, "bot", true);
+                    saveToHistory("assistant", botText);
                 }
             } catch (err) {
                 removeLoadingIndicator(loadingId);
-                appendMessage("EVYON IA", "⚠️ Error de conexión.", "bot-message", false);
+                appendMessage("EVYON IA", "⚠️ Error de conexión.", "bot", false);
             }
         }
 
-        function handleApiError(error) {
-            if (error.code === 'invalid_api_key' || error.code === 'invalid_api_key_header') {
-                localStorage.removeItem("evyon_api_key");
-                apiKey = null;
-                appendMessage("SISTEMA", "❌ API Key inválida.", "bot-message", false);
-            } else { 
-                appendMessage("SISTEMA", "Error: " + error.message, "bot-message", false);
+        /* --------------------------
+           PERSISTENCIA (LOCALSTORAGE)
+        ---------------------------*/
+        function saveToHistory(role, content) {
+            conversationHistory.push({ role, content });
+            // Limite de memoria RAM (últimos 15)
+            if (conversationHistory.length > 15) conversationHistory = conversationHistory.slice(conversationHistory.length - 15);
+            
+            // Guardar en disco
+            localStorage.setItem(`evyon_chat_${currentUserData.name}`, JSON.stringify(conversationHistory));
+        }
+
+        function loadChatHistory() {
+            const saved = localStorage.getItem(`evyon_chat_${currentUserData.name}`);
+            const box = document.getElementById("chatBox");
+            box.innerHTML = ""; // Limpiar visualmente
+
+            if (saved) {
+                conversationHistory = JSON.parse(saved);
+                // Reconstruir chat visualmente
+                conversationHistory.forEach(msg => {
+                    const sender = msg.role === 'user' ? "Tú" : "EVYON IA";
+                    const cssClass = msg.role === 'user' ? "user" : "bot";
+                    appendMessage(sender, msg.content, cssClass, false);
+                });
+            } else {
+                // Si es nuevo, poner welcome
+                appendMessage("EVYON IA", currentUserData.welcome, "bot", false);
+                renderSuggestions(currentUserData.suggestions);
             }
         }
 
@@ -492,64 +462,68 @@
             return formatted;
         }
 
-        // Función para renderizar botones de sugerencia
         function renderSuggestions(list) {
             let box = document.getElementById("chatBox");
             let container = document.createElement("div");
             container.className = "suggestions-container";
-            
             list.forEach(item => {
                 let btn = document.createElement("div");
                 btn.className = "suggestion-chip";
                 btn.innerText = item;
-                btn.onclick = () => sendMessage(item); // Al hacer click, envía el mensaje
+                btn.onclick = () => sendMessage(item);
                 container.appendChild(btn);
             });
-            
             box.appendChild(container);
             box.scrollTop = box.scrollHeight;
         }
 
-        function appendMessage(sender, message, className, useTypingEffect) {
+        function appendMessage(sender, message, type, useTyping) {
             let box = document.getElementById("chatBox");
-            let div = document.createElement("div");
-            div.classList.add(className);
             
-            // Preparar HTML base
-            let headerHtml = `<strong>${sender}:</strong> `;
-            let contentHtml = formatText(message);
+            // Estructura: Row -> Avatar + Bubble
+            let row = document.createElement("div");
+            row.className = `message-row ${type}`;
 
-            if (className === 'bot-message' && useTypingEffect) {
-                // Efecto Typing
-                div.innerHTML = headerHtml; // Poner el nombre primero
-                let contentSpan = document.createElement('span');
-                div.appendChild(contentSpan);
-                box.appendChild(div);
-                
-                // Simulación de escritura rápida
-                // Nota: El HTML formateado es difícil de "tipear" caracter por caracter sin romper tags.
-                // Para simplificar y mantener formato rico, mostramos bloque por bloque o fade in rápido.
-                // Aquí usaremos FadeIn rápido que ya tenemos en CSS, pero retrasado.
-                contentSpan.innerHTML = contentHtml;
-                
+            // Avatar
+            let avatar = document.createElement("div");
+            avatar.className = `avatar ${type}-avatar`;
+            avatar.innerHTML = type === 'user' ? '👤' : '🤖';
+
+            // Burbuja
+            let bubble = document.createElement("div");
+            bubble.className = "message-bubble";
+            
+            let formattedHtml = formatText(message);
+
+            if (type === 'bot' && useTyping) {
+                // Simular typing simple
+                bubble.innerHTML = formattedHtml; // Insertamos directo (animación compleja de texto es riesgosa con HTML rico)
+                // Se podría agregar clase fade-in si se desea
             } else {
-                div.innerHTML = headerHtml + contentHtml;
-                box.appendChild(div);
+                bubble.innerHTML = formattedHtml;
             }
 
+            // Orden visual
+            if (type === 'bot') {
+                row.appendChild(avatar);
+                row.appendChild(bubble);
+            } else {
+                row.appendChild(bubble); // Usuario a la derecha (avatar opcional, aquí lo quito para limpieza o lo pongo al final)
+                // row.appendChild(avatar); // Descomentar si quieres avatar de usuario a la derecha
+            }
+
+            box.appendChild(row);
             box.scrollTop = box.scrollHeight;
         }
 
         function showLoadingIndicator() {
             const id = "loading-" + Date.now();
             let box = document.getElementById("chatBox");
-            let div = document.createElement("div");
-            div.id = id;
-            div.classList.add("bot-message");
-            div.style.color = "#888";
-            div.style.fontStyle = "italic";
-            div.innerText = "Escribiendo...";
-            box.appendChild(div);
+            let row = document.createElement("div");
+            row.className = "message-row bot";
+            row.id = id;
+            row.innerHTML = `<div class="avatar bot-avatar">🤖</div><div class="message-bubble" style="color:#888; font-style:italic;">Escribiendo...</div>`;
+            box.appendChild(row);
             box.scrollTop = box.scrollHeight;
             return id;
         }
@@ -557,6 +531,11 @@
         function removeLoadingIndicator(id) {
             const el = document.getElementById(id);
             if (el) el.remove();
+        }
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
         }
 
         function handleChatKey(e) {
