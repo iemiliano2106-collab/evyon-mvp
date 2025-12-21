@@ -13,14 +13,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* 🔒 FIX 9.2: Usamos dvh para móviles y overflow hidden para que NO scrollee el fondo gris */
             height: 100dvh; 
             margin: 0;
             overflow: hidden; 
             overscroll-behavior: none;
         }
 
-        /* --- CONTENEDORES --- */
+        /* --- CONTENEDOR PRINCIPAL (LA CAJA) --- */
         .app-card {
             width: 90%;
             max-width: 420px;
@@ -36,60 +35,41 @@
             transition: all 0.3s ease;
         }
 
-        /* 🔒 FIX 9.2: MODO APP NATIVA EN MÓVIL 
-           Cuando la pantalla es chica (celular), quitamos el modo "tarjeta flotante"
-           y ocupamos toda la pantalla. Esto arregla el salto del teclado. */
+        /* MODO APP EN MÓVIL (PANTALLA COMPLETA) */
         @media (max-width: 600px) {
             .app-card {
                 width: 100%;
-                height: 100dvh; /* Altura dinámica completa */
+                height: 100dvh;
                 max-width: none;
                 max-height: none;
-                border-radius: 0; /* Sin bordes redondos en móvil */
+                border-radius: 0;
                 padding: 15px;
                 box-shadow: none;
             }
-            body {
-                background-color: #2b2b2b; /* Fondo oscuro para que combine con el header si rebota */
-            }
+            body { background-color: #2b2b2b; }
         }
 
-        /* --- LOGIN SCREEN --- */
+        /* --- PANTALLA DE LOGIN --- */
         #login-screen {
             text-align: center;
             color: white;
-            padding: 30px 10px;
-            height: auto;
-            max-height: none;
             justify-content: center;
-            /* En móvil queremos que el login sí esté centrado bonito */
-            height: 100%; 
-            display: flex;
-            flex-direction: column;
         }
 
         .login-logo {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 5px;
-            color: #3cd186;
-            letter-spacing: 1px;
+            font-size: 28px; font-weight: 800; margin-bottom: 5px; color: #3cd186; letter-spacing: 1px;
         }
-
         .login-subtitle {
-            font-size: 13px; color: #aaa; margin-bottom: 30px;
-            text-transform: uppercase; letter-spacing: 1px;
+            font-size: 13px; color: #aaa; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px;
         }
-
         .login-input {
             width: 100%; padding: 14px; margin: 8px 0;
             border: 1px solid #555; border-radius: 8px;
             background-color: #2b2b2b; color: white;
             outline: none; box-sizing: border-box; transition: all 0.3s;
-            font-size: 16px; /* Anti-Zoom iOS */
+            font-size: 16px; /* Anti-zoom iOS */
         }
         .login-input:focus { border-color: #3cd186; background-color: #333; }
-
         .login-btn {
             width: 100%; padding: 14px; margin-top: 20px;
             background: linear-gradient(90deg, #3cd186, #2eb06d);
@@ -98,15 +78,13 @@
             transition: transform 0.2s;
         }
         .login-btn:hover { transform: translateY(-2px); }
+        .error-msg { color: #ff6b6b; font-size: 13px; margin-top: 15px; opacity: 0; transition: opacity 0.3s; }
 
-        .error-msg {
-            color: #ff6b6b; font-size: 13px; margin-top: 15px; opacity: 0; transition: opacity 0.3s;
-        }
-
-        /* --- CHAT INTERFACE --- */
+        /* --- INTERFAZ DE CHAT --- */
         #chat-interface {
             display: none; opacity: 0;
-            flex-direction: column;
+            /* Flex column es vital para que no se desparrame */
+            flex-direction: column; 
             height: 100%;
         }
 
@@ -119,15 +97,11 @@
         }
 
         .header-actions { display: flex; gap: 10px; }
-        
-        .header-btn {
-            font-size: 12px; color: #aaa; cursor: pointer;
-            background: none; border: none; text-decoration: underline;
-        }
+        .header-btn { font-size: 12px; color: #aaa; cursor: pointer; background: none; border: none; text-decoration: underline; }
         .header-btn:hover { color: white; }
         .btn-clear:hover { color: #ff6b6b; }
 
-        /* --- CHAT BOX & MESSAGES --- */
+        /* --- CHAT BOX --- */
         .chat-box {
             background-color: #ffffff;
             flex: 1; 
@@ -138,43 +112,28 @@
             -webkit-overflow-scrolling: touch; 
         }
 
-        .message-row {
-            display: flex; align-items: flex-end; gap: 8px; max-width: 100%;
-        }
+        .message-row { display: flex; align-items: flex-end; gap: 8px; max-width: 100%; }
         .message-row.user { justify-content: flex-end; }
         .message-row.bot { justify-content: flex-start; }
 
         .avatar {
             width: 30px; height: 30px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 18px; flex-shrink: 0;
+            display: flex; justify-content: center; align-items: center; font-size: 18px; flex-shrink: 0;
         }
         .bot-avatar { background-color: #e0f2f1; border: 1px solid #3cd186; }
         .user-avatar { background-color: #3cd186; color: white; }
 
         .message-bubble {
-            padding: 12px 16px; border-radius: 14px;
-            max-width: 80%; font-size: 15px; line-height: 1.5;
-            word-wrap: break-word; position: relative;
+            padding: 12px 16px; border-radius: 14px; max-width: 80%;
+            font-size: 15px; line-height: 1.5; word-wrap: break-word; position: relative;
         }
-        .user .message-bubble {
-            background-color: #3cd186; color: white;
-            border-bottom-right-radius: 2px;
-            box-shadow: 0 2px 5px rgba(60, 209, 134, 0.2);
-        }
-        .bot .message-bubble {
-            background-color: #f3f4f6; color: #333;
-            border-bottom-left-radius: 2px;
-            border: 1px solid #eee;
-        }
-
+        .user .message-bubble { background-color: #3cd186; color: white; border-bottom-right-radius: 2px; box-shadow: 0 2px 5px rgba(60, 209, 134, 0.2); }
+        .bot .message-bubble { background-color: #f3f4f6; color: #333; border-bottom-left-radius: 2px; border: 1px solid #eee; }
         .chat-title { font-weight: 800; color: #1b5e20; margin-top: 10px; display: block; }
         strong { font-weight: 700; }
 
         /* --- SUGGESTIONS --- */
-        .suggestions-container {
-            display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
-        }
+        .suggestions-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .suggestion-chip {
             background-color: white; border: 1px solid #3cd186; color: #3cd186;
             padding: 6px 12px; border-radius: 20px; font-size: 13px;
@@ -184,33 +143,21 @@
 
         /* --- INPUT AREA --- */
         .input-wrapper {
-            margin-top: 10px;
-            background-color: #2b2b2b;
-            padding: 10px;
-            border-radius: 12px;
-            flex-shrink: 0;
+            margin-top: 10px; background-color: #2b2b2b; padding: 10px; border-radius: 12px; flex-shrink: 0;
         }
-
         .input-container { display: flex; gap: 8px; align-items: flex-end; }
-
         .chat-input {
             flex: 1; padding: 10px; border: none; border-radius: 8px;
             outline: none; resize: none; background: white;
             font-family: inherit; min-height: 24px; max-height: 100px;
-            overflow-y: hidden;
-            font-size: 16px; 
+            overflow-y: hidden; font-size: 16px; 
         }
-
         .send-btn {
             background-color: #3cd186; color: white; border: none;
-            padding: 10px 15px; border-radius: 8px; cursor: pointer;
-            font-weight: bold; height: 44px;
+            padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; height: 44px;
         }
         .send-btn:hover { background-color: #2eb06d; }
-
-        .disclaimer {
-            font-size: 10px; color: #888; text-align: center; margin-top: 8px;
-        }
+        .disclaimer { font-size: 10px; color: #888; text-align: center; margin-top: 8px; }
 
     </style>
 </head>
@@ -228,12 +175,13 @@
         <button class="login-btn" onclick="attemptLogin()">INGRESAR</button>
     </div>
 
-    <div class="chat-header">
+    <div class="app-card" id="chat-interface">
+        
+        <div class="chat-header">
             <div style="display:flex; align-items:center; gap:10px;">
                 <img src="logo.jpeg" alt="Logo" style="height: 40px; width: 40px; border-radius: 50%; object-fit: cover;">
                 <span style="font-weight:bold; font-size:18px;">EVYON IA</span>
             </div>
-
             <div class="header-actions">
                 <button class="header-btn btn-clear" onclick="clearChat()">Limpiar Chat</button>
                 <button class="header-btn" onclick="logout()">Salir</button>
@@ -247,7 +195,7 @@
                 <textarea id="userInput" class="chat-input" placeholder="Escribe aquí..." rows="1" oninput="autoResize(this)" onkeydown="handleChatKey(event)"></textarea>
                 <button class="send-btn" onclick="sendMessage()">➤</button>
             </div>
-            <div class="disclaimer">EVYON te acompaña con recomendaciones basadas en ciencia y bienestar, pero no reemplaza la consulta con un médico o especialista de la salud.</div>
+            <div class="disclaimer">EVYON es un asistente IA. No sustituye consejo médico profesional.</div>
         </div>
     </div>
 
@@ -274,9 +222,9 @@
             },
             "gatito": { 
                 pass: "Pachon123", 
-                name: "Mi Gatito ❤️", 
-                welcome: "¡Hola Bonito Gatito! ❤️ Bienvenida a tu espacio personal en EVYON.\n\nEstoy programado para cuidarte y ayudarte a ponerte más guapa y fuerte. ¿Qué se te antoja hacer hoy?",
-                suggestions: ["🍑 Rutina de Glúteo", "🍫 Snacks saludables", "🍗 Rutina de pierna"]
+                name: "Mi Niña ❤️", 
+                welcome: "¡Hola hermosa! ❤️ Bienvenida a tu espacio personal en EVYON.\n\nEstoy programado para cuidarte y ayudarte a ponerte más guapa y fuerte. ¿Qué se te antoja hacer hoy?",
+                suggestions: ["🍑 Rutina de Glúteo", "🍫 Snacks saludables", "🧘‍♀️ Yoga para el estrés"]
             },
             "oxigeno": {
                 pass: "oxi123", name: "Gimnasio Oxígeno",
@@ -296,7 +244,6 @@
         function attemptLogin() {
             const userKey = document.getElementById("username").value.trim(); 
             const dbKey = Object.keys(INSTITUTION_DB).find(key => key.toLowerCase() === userKey.toLowerCase());
-            
             const passInput = document.getElementById("password").value.trim();
             const errorMsg = document.getElementById("loginError");
 
@@ -397,7 +344,6 @@
 
             appendMessage("Tú", text, "user", false);
             saveToHistory("user", text);
-            
             input.value = "";
             input.style.height = "auto";
             
@@ -407,10 +353,7 @@
             const loadingId = showLoadingIndicator();
 
             const systemPrompt = getDynamicSystemPrompt(text, currentUserData);
-            let apiMessages = [
-                { role: "system", content: systemPrompt },
-                ...conversationHistory
-            ];
+            let apiMessages = [{ role: "system", content: systemPrompt }, ...conversationHistory];
 
             try {
                 let res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -453,7 +396,6 @@
             const saved = localStorage.getItem(`evyon_chat_${currentUserData.name}`);
             const box = document.getElementById("chatBox");
             box.innerHTML = ""; 
-
             if (saved) {
                 conversationHistory = JSON.parse(saved);
                 conversationHistory.forEach(msg => {
@@ -504,21 +446,11 @@
 
             let bubble = document.createElement("div");
             bubble.className = "message-bubble";
-            
             let formattedHtml = formatText(message);
+            bubble.innerHTML = formattedHtml;
 
-            if (type === 'bot' && useTyping) {
-                bubble.innerHTML = formattedHtml;
-            } else {
-                bubble.innerHTML = formattedHtml;
-            }
-
-            if (type === 'bot') {
-                row.appendChild(avatar);
-                row.appendChild(bubble);
-            } else {
-                row.appendChild(bubble);
-            }
+            if (type === 'bot') { row.appendChild(avatar); row.appendChild(bubble); } 
+            else { row.appendChild(bubble); }
 
             box.appendChild(row);
             box.scrollTop = box.scrollHeight;
@@ -547,10 +479,7 @@
         }
 
         function handleChatKey(e) {
-            if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
+            if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
         }
     </script>
 </body>
