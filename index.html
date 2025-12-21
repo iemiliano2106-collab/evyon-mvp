@@ -7,17 +7,25 @@
 
     <style>
         /* --- ESTILOS GENERALES --- */
-        body {
+        html, body {
             font-family: 'Inter', sans-serif;
             background-color: #eef1f5;
+            height: 100%; /* Altura total fija */
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prohibido scrollear la página entera */
+            overscroll-behavior: none; /* Evita el rebote elástico de iOS */
+            /* 🔒 FIX 9.6: Esto fija la página base para que no salte con el teclado */
+            position: fixed; 
+            top: 0;
+            left: 0;
+        }
+
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
-            /* 🔒 FIX 9.2: Usamos dvh para móviles y overflow hidden para que NO scrollee el fondo gris */
-            height: 100dvh; 
-            margin: 0;
-            overflow: hidden; 
-            overscroll-behavior: none;
         }
 
         /* --- CONTENEDOR PRINCIPAL --- */
@@ -36,36 +44,31 @@
             transition: all 0.3s ease;
         }
 
-        /* 🔒 FIX 9.2: MODO APP NATIVA EN MÓVIL 
-           Cuando la pantalla es chica (celular), quitamos el modo "tarjeta flotante"
-           y ocupamos toda la pantalla. Esto arregla el salto del teclado. */
+        /* 🔒 FIX 9.6: MODO APP EN MÓVIL (ANCLAJE) */
         @media (max-width: 600px) {
             .app-card {
+                position: fixed; /* Clavado a la pantalla */
+                top: 0;
+                left: 0;
                 width: 100%;
-                height: 100dvh; /* Altura dinámica completa */
+                height: 100%; /* Ocupa todo el espacio disponible (incluso con teclado) */
                 max-width: none;
                 max-height: none;
-                border-radius: 0; /* Sin bordes redondos en móvil */
+                border-radius: 0;
                 padding: 15px;
                 box-shadow: none;
+                margin: 0;
             }
-            body {
-                background-color: #2b2b2b; /* Fondo oscuro para que combine con el header si rebota */
-            }
+            body { background-color: #2b2b2b; }
         }
 
         /* --- LOGIN SCREEN --- */
         #login-screen {
             text-align: center;
             color: white;
-            padding: 30px 10px;
-            height: auto;
-            max-height: none;
             justify-content: center;
-            /* En móvil queremos que el login sí esté centrado bonito */
-            height: 100%; 
-            display: flex;
-            flex-direction: column;
+            /* Asegura que el login también se comporte bien */
+            overflow-y: auto; 
         }
 
         .login-logo { font-size: 28px; font-weight: 800; margin-bottom: 5px; color: #3cd186; letter-spacing: 1px; }
@@ -75,7 +78,7 @@
             border: 1px solid #555; border-radius: 8px;
             background-color: #2b2b2b; color: white;
             outline: none; box-sizing: border-box; transition: all 0.3s;
-            font-size: 16px; /* Anti-Zoom iOS */
+            font-size: 16px; /* Anti-zoom iOS */
         }
         .login-input:focus { border-color: #3cd186; background-color: #333; }
         .login-btn {
@@ -88,11 +91,13 @@
         .login-btn:hover { transform: translateY(-2px); }
         .error-msg { color: #ff6b6b; font-size: 13px; margin-top: 15px; opacity: 0; transition: opacity 0.3s; }
 
-        /* --- CHAT INTERFACE --- */
+        /* --- INTERFAZ DE CHAT --- */
         #chat-interface {
             display: none; opacity: 0;
             flex-direction: column;
             height: 100%;
+            /* Fix para que el contenido no se corte */
+            overflow: hidden; 
         }
 
         .chat-header {
@@ -122,17 +127,17 @@
         .message-row { display: flex; align-items: flex-end; gap: 8px; max-width: 100%; }
         .message-row.user { justify-content: flex-end; }
         .message-row.bot { justify-content: flex-start; }
+
         .avatar {
             width: 30px; height: 30px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 18px; flex-shrink: 0;
+            display: flex; justify-content: center; align-items: center; font-size: 18px; flex-shrink: 0;
         }
         .bot-avatar { background-color: #e0f2f1; border: 1px solid #3cd186; }
         .user-avatar { background-color: #3cd186; color: white; }
+
         .message-bubble {
-            padding: 12px 16px; border-radius: 14px;
-            max-width: 80%; font-size: 15px; line-height: 1.5;
-            word-wrap: break-word; position: relative;
+            padding: 12px 16px; border-radius: 14px; max-width: 80%;
+            font-size: 15px; line-height: 1.5; word-wrap: break-word; position: relative;
         }
         .user .message-bubble { background-color: #3cd186; color: white; border-bottom-right-radius: 2px; box-shadow: 0 2px 5px rgba(60, 209, 134, 0.2); }
         .bot .message-bubble { background-color: #f3f4f6; color: #333; border-bottom-left-radius: 2px; border: 1px solid #eee; }
@@ -151,6 +156,8 @@
         /* --- INPUT AREA --- */
         .input-wrapper {
             margin-top: 10px; background-color: #2b2b2b; padding: 10px; border-radius: 12px; flex-shrink: 0;
+            /* Asegura que el input se quede abajo */
+            padding-bottom: env(safe-area-inset-bottom); 
         }
         .input-container { display: flex; gap: 8px; align-items: flex-end; }
         .chat-input {
@@ -160,7 +167,8 @@
             overflow-y: hidden; font-size: 16px; 
         }
         .send-btn {
-            background-color: #3cd186; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; height: 44px;
+            background-color: #3cd186; color: white; border: none;
+            padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; height: 44px;
         }
         .send-btn:hover { background-color: #2eb06d; }
         .disclaimer { font-size: 10px; color: #888; text-align: center; margin-top: 8px; }
@@ -227,9 +235,9 @@
             },
             "gatito": { 
                 pass: "Pachon123", 
-                name: "Mi Gatito Pachon ❤️", 
+                name: "Mi Niña ❤️", 
                 welcome: "¡Hola hermoso Gatito Pachon! ❤️ Bienvenida a tu espacio personal en EVYON.\n\nEstoy programado para cuidarte y ayudarte a ponerte más guapa y fuerte. ¿Qué se te antoja hacer hoy?",
-                suggestions: ["Rutina de Glúteo 🍑", "Snacks saludables 🍫", "Rutina de Pierna 🍗"]
+                suggestions: ["🍑 Rutina de Glúteo", "🍫 Snacks saludables", "🧘‍♀️ Yoga para el estrés"]
             },
             "oxigeno": {
                 pass: "oxi123", name: "Gimnasio Oxígeno",
@@ -249,7 +257,6 @@
         function attemptLogin() {
             const userKey = document.getElementById("username").value.trim(); 
             const dbKey = Object.keys(INSTITUTION_DB).find(key => key.toLowerCase() === userKey.toLowerCase());
-            
             const passInput = document.getElementById("password").value.trim();
             const errorMsg = document.getElementById("loginError");
 
@@ -324,7 +331,6 @@
         function getDynamicSystemPrompt(text, user) {
             const lowerText = text.toLowerCase();
 
-            // 🚑 MODO 1: MÉDICO (Seguridad Máxima)
             if (lowerText.includes("dolor") || lowerText.includes("duele") || lowerText.includes("lesión") || lowerText.includes("lastim") || lowerText.includes("enfermo")) {
                 return `Actúa como un Fisioterapeuta Deportivo Cauteloso asignado a ${user.name}.
                 TU PRIORIDAD ES LA SEGURIDAD DEL USUARIO.
@@ -334,7 +340,6 @@
                 - Evita el humor en este momento.`;
             }
 
-            // 🦁 MODO 2: COACH ESPARTANO (Motivación)
             if (lowerText.includes("flojera") || lowerText.includes("no quiero") || lowerText.includes("rendir") || lowerText.includes("cansado") || lowerText.includes("ánimo")) {
                 return `Actúa como un Coach de Alto Rendimiento Espartano asignado a ${user.name}.
                 TU OBJETIVO ES LEVANTAR EL ÁNIMO.
@@ -344,33 +349,16 @@
                 - Sé breve y contundente. No aceptes excusas.`;
             }
 
-            // 🥗 MODO 3: EXPERTO INTEGRAL (Default Premium)
             return `Actúa como EVYON, un Experto en Rendimiento Humano Integral asignado a: ${user.name}.
             Tus áreas de dominio son: Nutrición Deportiva, Entrenamiento de Fuerza, Higiene del Sueño y Psicología Deportiva.
             
-            TUS REGLAS SUPREMAS DE COMPORTAMIENTO:
-            
-            1. **CERO ROBOTISMO**:
-               - ¡NO empieces cada mensaje diciendo "Hola ${user.name}"! Eso suena falso.
-               - Habla natural. Usa el nombre solo muy de vez en cuando para enfatizar.
-            
-            2. **PERFILAMIENTO ACTIVO (Crucial)**:
-               - Si el usuario te pide una dieta o rutina y NO tienes sus datos (peso, edad, lesiones, objetivos), ¡NO LA INVENTES!
-               - Primero PREGUNTA amablemente los datos que te faltan. Actúa como un profesional que hace una anamnesis.
-            
-            3. **ESPEJO TÉCNICO/EMOCIONAL**:
-               - Analiza el nivel del usuario. ¿Habla con términos como "hipertrofia sarcoplasmática"? Responde con ciencia dura.
-               - ¿Habla casual o emocional? Responde con calidez y sencillez.
-            
-            4. **MODO CADENERO (Rechazo con Clase)**:
-               - Si te preguntan de Autos, Tecnología, Política, etc., NO seas seco.
-               - Usa una analogía fitness para declinar.
-               - Ejemplo: "No soy mecánico, pero si tu cuerpo fuera un Ferrari, te diría que el combustible es clave... ¿Hablamos de tu nutrición?"
-            
-            5. **VERACIDAD INVISIBLE**:
-               - Basa TODAS tus recomendaciones en evidencia científica (ACSM, ISSN, OMS), pero no cites como enciclopedia aburrida. Aplícalo al consejo práctico.
-            
-            6. **FORMATO**: Es OBLIGATORIO usar listas, negritas (**) y emojis (🥗, 💪) para facilitar la lectura.
+            REGLAS SUPREMAS:
+            1. **CERO ROBOTISMO**: No saludes siempre con "Hola ${user.name}". Sé natural.
+            2. **PERFILAMIENTO ACTIVO**: Si piden dieta/rutina, pregunta datos primero (peso, lesiones).
+            3. **ESPEJO**: Adáptate al nivel técnico o emocional del usuario.
+            4. **MODO CADENERO**: Si preguntan de Autos/Tech, rechaza amablemente con analogía fitness.
+            5. **VERACIDAD**: Basa todo en ciencia (ACSM/OMS) pero práctico.
+            6. **FORMATO**: Usa listas, negritas y emojis.
             
             Responde siempre en español.`;
         }
@@ -387,7 +375,6 @@
 
             appendMessage("Tú", text, "user", false);
             saveToHistory("user", text);
-            
             input.value = "";
             input.style.height = "auto";
             
@@ -397,10 +384,7 @@
             const loadingId = showLoadingIndicator();
 
             const systemPrompt = getDynamicSystemPrompt(text, currentUserData);
-            let apiMessages = [
-                { role: "system", content: systemPrompt },
-                ...conversationHistory
-            ];
+            let apiMessages = [{ role: "system", content: systemPrompt }, ...conversationHistory];
 
             try {
                 let res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -443,7 +427,6 @@
             const saved = localStorage.getItem(`evyon_chat_${currentUserData.name}`);
             const box = document.getElementById("chatBox");
             box.innerHTML = ""; 
-
             if (saved) {
                 conversationHistory = JSON.parse(saved);
                 conversationHistory.forEach(msg => {
@@ -494,21 +477,11 @@
 
             let bubble = document.createElement("div");
             bubble.className = "message-bubble";
-            
             let formattedHtml = formatText(message);
+            bubble.innerHTML = formattedHtml;
 
-            if (type === 'bot' && useTyping) {
-                bubble.innerHTML = formattedHtml;
-            } else {
-                bubble.innerHTML = formattedHtml;
-            }
-
-            if (type === 'bot') {
-                row.appendChild(avatar);
-                row.appendChild(bubble);
-            } else {
-                row.appendChild(bubble);
-            }
+            if (type === 'bot') { row.appendChild(avatar); row.appendChild(bubble); } 
+            else { row.appendChild(bubble); }
 
             box.appendChild(row);
             box.scrollTop = box.scrollHeight;
@@ -537,10 +510,7 @@
         }
 
         function handleChatKey(e) {
-            if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-            }
+            if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
         }
     </script>
 </body>
