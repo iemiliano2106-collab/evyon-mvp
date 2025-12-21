@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
     <title>EVYON IA - Acceso Institucional</title>
 
     <style>
@@ -13,9 +13,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            /* 🔒 FIX 9.2: Usamos dvh para móviles y overflow hidden para que NO scrollee el fondo gris */
+            height: 100dvh; 
             margin: 0;
-            /* Evita el rebote en iOS */
+            overflow: hidden; 
             overscroll-behavior: none;
         }
 
@@ -32,6 +33,25 @@
             flex-direction: column;
             height: 90vh; 
             max-height: 800px;
+            transition: all 0.3s ease;
+        }
+
+        /* 🔒 FIX 9.2: MODO APP NATIVA EN MÓVIL 
+           Cuando la pantalla es chica (celular), quitamos el modo "tarjeta flotante"
+           y ocupamos toda la pantalla. Esto arregla el salto del teclado. */
+        @media (max-width: 600px) {
+            .app-card {
+                width: 100%;
+                height: 100dvh; /* Altura dinámica completa */
+                max-width: none;
+                max-height: none;
+                border-radius: 0; /* Sin bordes redondos en móvil */
+                padding: 15px;
+                box-shadow: none;
+            }
+            body {
+                background-color: #2b2b2b; /* Fondo oscuro para que combine con el header si rebota */
+            }
         }
 
         /* --- LOGIN SCREEN --- */
@@ -42,6 +62,10 @@
             height: auto;
             max-height: none;
             justify-content: center;
+            /* En móvil queremos que el login sí esté centrado bonito */
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
         }
 
         .login-logo {
@@ -62,8 +86,7 @@
             border: 1px solid #555; border-radius: 8px;
             background-color: #2b2b2b; color: white;
             outline: none; box-sizing: border-box; transition: all 0.3s;
-            /* 🔒 FIX ANTI-ZOOM: 16px evita que iOS active la lupa */
-            font-size: 16px; 
+            font-size: 16px; /* Anti-Zoom iOS */
         }
         .login-input:focus { border-color: #3cd186; background-color: #333; }
 
@@ -112,7 +135,6 @@
             padding: 15px; border-radius: 12px;
             display: flex; flex-direction: column; gap: 15px;
             scroll-behavior: smooth;
-            /* Scroll suave en iOS */
             -webkit-overflow-scrolling: touch; 
         }
 
@@ -176,7 +198,6 @@
             outline: none; resize: none; background: white;
             font-family: inherit; min-height: 24px; max-height: 100px;
             overflow-y: hidden;
-            /* 🔒 FIX ANTI-ZOOM: 16px es el tamaño mágico para iOS */
             font-size: 16px; 
         }
 
@@ -250,9 +271,9 @@
             },
             "gatito": { 
                 pass: "Pachon123", 
-                name: "Mi Gatito Pachon ❤️", 
-                welcome: "¡Hola hermoso Gatito Pachon! ❤️ Bienvenida a tu espacio personal en EVYON.\n\nEstoy programado para cuidarte y ayudarte a ponerte más guapa y fuerte. ¿Qué se te antoja hacer hoy?",
-                suggestions: ["🍑 Rutina de glúteo", "🍫 Snacks saludables", "🧘‍♀️ Rutina de pierna"]
+                name: "Mi Niña ❤️", 
+                welcome: "¡Hola hermosa! ❤️ Bienvenida a tu espacio personal en EVYON.\n\nEstoy programado para cuidarte y ayudarte a ponerte más guapa y fuerte. ¿Qué se te antoja hacer hoy?",
+                suggestions: ["🍑 Rutina de Glúteo", "🍫 Snacks saludables", "🧘‍♀️ Yoga para el estrés"]
             },
             "oxigeno": {
                 pass: "oxi123", name: "Gimnasio Oxígeno",
@@ -270,8 +291,7 @@
            LOGIN & INICIO
         ---------------------------*/
         function attemptLogin() {
-            const userKey = document.getElementById("username").value.trim(); // Sensitive case removed for safety
-            // Búsqueda insensible a mayúsculas/minúsculas para el usuario
+            const userKey = document.getElementById("username").value.trim(); 
             const dbKey = Object.keys(INSTITUTION_DB).find(key => key.toLowerCase() === userKey.toLowerCase());
             
             const passInput = document.getElementById("password").value.trim();
@@ -302,10 +322,7 @@
             const chat = document.getElementById("chat-interface");
             chat.style.display = "flex";
             setTimeout(() => { chat.style.opacity = "1"; }, 50);
-
             loadChatHistory();
-            // Retraso el foco para evitar teclado repentino en móviles
-            // setTimeout(() => document.getElementById("userInput").focus(), 300); 
         }
 
         function logout() { 
