@@ -44,20 +44,22 @@
             transition: all 0.3s ease;
         }
 
-        /* 🔒 FIX 9.6: MODO APP EN MÓVIL (ANCLAJE) */
+        /* 🔒 FIX 9.7: AÑADIDO box-sizing PARA QUE NO SE CORTE A LA DERECHA */
         @media (max-width: 600px) {
             .app-card {
-                position: fixed; /* Clavado a la pantalla */
+                position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
-                height: 100%; /* Ocupa todo el espacio disponible (incluso con teclado) */
+                height: 100%;
                 max-width: none;
                 max-height: none;
                 border-radius: 0;
                 padding: 15px;
                 box-shadow: none;
                 margin: 0;
+                /* 👇 ESTA ES LA LÍNEA MÁGICA QUE TE FALTABA 👇 */
+                box-sizing: border-box; 
             }
             body { background-color: #2b2b2b; }
         }
