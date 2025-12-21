@@ -9,7 +9,7 @@
         /* --- ESTILOS GENERALES --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4f4f9;
+            background-color: #eef1f5; /* Un tono gris más moderno */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,68 +17,85 @@
             margin: 0;
         }
 
-        /* --- CONTENEDORES --- */
+        /* --- CONTENEDORES (RESPONSIVE) --- */
         .app-card {
-            width: 350px;
+            width: 90%;          /* Ocupa el 90% en celular */
+            max-width: 400px;    /* Pero no pasa de 400px en PC */
             background-color: #3D3D3D;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.4);
             position: relative;
             transition: opacity 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh; /* Para que no se salga de pantallas chicas */
         }
 
         /* --- LOGIN SCREEN --- */
         #login-screen {
             text-align: center;
             color: white;
-            padding: 20px 10px;
+            padding: 30px 10px;
         }
 
         .login-logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
             color: #3cd186;
+            letter-spacing: 1px;
+        }
+
+        .login-subtitle {
+            font-size: 13px; 
+            color: #aaa; 
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .login-input {
-            width: 90%;
-            padding: 12px;
+            width: 100%;
+            padding: 14px;
             margin: 8px 0;
             border: 1px solid #555;
-            border-radius: 6px;
+            border-radius: 8px;
             background-color: #2b2b2b;
             color: white;
             outline: none;
-            transition: border 0.3s;
+            box-sizing: border-box; /* Para que el padding no rompa el ancho */
+            transition: all 0.3s;
         }
 
         .login-input:focus {
             border-color: #3cd186;
+            background-color: #333;
         }
 
         .login-btn {
-            width: 98%;
-            padding: 12px;
-            margin-top: 15px;
-            background-color: #3cd186;
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: linear-gradient(90deg, #3cd186, #2eb06d);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .login-btn:hover {
-            background-color: #2eb06d;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(60, 209, 134, 0.3);
         }
 
         .error-msg {
             color: #ff6b6b;
             font-size: 13px;
-            margin-top: 10px;
+            margin-top: 15px;
             min-height: 20px;
             opacity: 0;
             transition: opacity 0.3s;
@@ -88,104 +105,126 @@
         #chat-interface {
             display: none;
             opacity: 0;
+            height: 600px; /* Altura fija base */
         }
 
         .chat-header {
-            background-color: #333;
+            background-color: #2b2b2b;
             color: white;
-            padding: 12px;
+            padding: 15px;
             text-align: center;
             font-weight: bold;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 10px;
+            border-radius: 12px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .logout-btn {
             font-size: 12px;
-            color: #aaa;
+            color: #888;
             cursor: pointer;
             background: none;
             border: none;
+            text-decoration: underline;
         }
-        .logout-btn:hover {
-            color: white;
-        }
+        .logout-btn:hover { color: #ff6b6b; }
 
         .chat-box {
-            background-color: white;
-            height: 350px;
+            background-color: #ffffff;
+            flex: 1; /* Ocupa el espacio disponible */
             overflow-y: auto;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 15px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
+            gap: 10px;
+            scroll-behavior: smooth;
         }
+
+        /* Scrollbar bonito */
+        .chat-box::-webkit-scrollbar { width: 6px; }
+        .chat-box::-webkit-scrollbar-thumb { background-color: #ccc; border-radius: 4px; }
 
         .user-message, .bot-message {
-            padding: 10px 14px;
-            border-radius: 12px;
-            margin: 6px 0;
-            max-width: 80%;
-            font-size: 14px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            max-width: 85%;
+            font-size: 15px;
             line-height: 1.5;
-            opacity: 0;
-            animation: fadeIn 0.3s forwards;
-            white-space: pre-wrap; 
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
+            position: relative;
+            word-wrap: break-word;
         }
 
         .user-message {
             background-color: #3cd186;
             color: white;
             align-self: flex-end;
-            text-align: right;
             border-bottom-right-radius: 2px;
+            box-shadow: 0 2px 5px rgba(60, 209, 134, 0.2);
         }
 
         .bot-message {
-            background-color: #f1f1f1;
+            background-color: #f3f4f6;
             color: #333;
             align-self: flex-start;
-            text-align: left;
             border-bottom-left-radius: 2px;
+            border: 1px solid #eee;
         }
 
-        /* --- ESTILOS INTERNOS DEL CHAT --- */
-        
-        .bot-message strong {
-            color: #2e7d32;
-            font-weight: 700;
-        }
-
-        /* Títulos (Sin línea abajo) */
+        /* Estilos internos del bot */
+        .bot-message strong { color: #1a5e3a; font-weight: 700; }
         .chat-title {
             font-size: 1.1em;
-            font-weight: bold;
+            font-weight: 800;
             color: #1b5e20; 
-            margin-top: 20px;
+            margin-top: 15px;
             margin-bottom: 5px;
             display: block;
         }
 
+        /* --- SUGGESTION CHIPS (Botones Rápidos) --- */
+        .suggestions-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .suggestion-chip {
+            background-color: white;
+            border: 1px solid #3cd186;
+            color: #3cd186;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        .suggestion-chip:hover {
+            background-color: #3cd186;
+            color: white;
+        }
+
+        /* --- INPUT --- */
         .input-container {
             display: flex;
             margin-top: 15px;
+            gap: 10px;
         }
 
         .chat-input {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             outline: none;
             resize: none;
-            height: 45px;
+            height: 50px;
+            font-family: inherit;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .send-btn {
@@ -193,11 +232,13 @@
             color: white;
             border: none;
             padding: 0 20px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            margin-left: 8px;
             font-weight: bold;
+            transition: background 0.2s;
         }
+        .send-btn:hover { background-color: #2eb06d; }
+
     </style>
 </head>
 
@@ -205,9 +246,9 @@
 
     <div class="app-card" id="login-screen">
         <div class="login-logo">EVYON IA 🔒</div>
-        <p style="font-size: 14px; color: #ccc; margin-bottom: 20px;">Acceso Institucional</p>
+        <div class="login-subtitle">Acceso Institucional Seguro</div>
 
-        <input type="text" id="username" class="login-input" placeholder="Usuario / ID Institución" onkeydown="handleLoginKey(event)">
+        <input type="text" id="username" class="login-input" placeholder="Usuario / ID" onkeydown="handleLoginKey(event)">
         <input type="password" id="password" class="login-input" placeholder="Contraseña" onkeydown="handleLoginKey(event)">
         
         <div id="loginError" class="error-msg">Credenciales incorrectas</div>
@@ -216,56 +257,56 @@
 
     <div class="app-card" id="chat-interface">
         <div class="chat-header">
-            <span>EVYON IA 🤖</span>
-            <button class="logout-btn" onclick="logout()">Salir</button>
+            <span style="display:flex; align-items:center; gap:8px;">🤖 EVYON IA</span>
+            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
         </div>
 
         <div class="chat-box" id="chatBox"></div>
 
         <div class="input-container">
-            <textarea id="userInput" class="chat-input" placeholder="Escribe tu mensaje..." onkeydown="handleChatKey(event)"></textarea>
+            <textarea id="userInput" class="chat-input" placeholder="Escribe aquí..." onkeydown="handleChatKey(event)"></textarea>
             <button class="send-btn" onclick="sendMessage()">Enviar</button>
         </div>
     </div>
 
     <script>
         /* --------------------------
-           CONFIGURACIÓN Y BASE DE DATOS
+           CONFIGURACIÓN Y DATOS
         ---------------------------*/
         let apiKey = localStorage.getItem("evyon_api_key");
         let currentUserData = null;
+        // 🧠 MEMORIA: Aquí guardaremos la conversación para que EVYON no olvide
+        let conversationHistory = []; 
 
         const INSTITUTION_DB = {
             "tec": { 
                 pass: "TEC2106",
                 name: "A01825448_Iván Emiliano López Vargas",
-                welcome: "¡Hola Borrego! 🐏 Soy EVYON. No soy solo un coach de gym, soy tu experto integral.<br><br>¿Por dónde empezamos hoy?<br>• 🛌 <b>Optimizar mi sueño y energía</b><br>• 🥦 <b>Plan nutricional personalizado</b><br>• 🏋️‍♂️ <b>Ajustar mi rutina de entrenamiento</b>"
+                welcome: "¡Hola Borrego! 🐏 Soy EVYON, tu experto integral.\n\n¿Por dónde empezamos hoy?",
+                suggestions: ["🛌 Optimizar sueño", "🥦 Plan nutricional", "🏋️‍♂️ Ajustar rutina"]
             },
             "justin": { 
                 pass: "TEC2025", 
                 name: "Justin (El Discípulo)", 
-                // WELCOME MEJORADO: Menú de opciones para incitar a la acción
-                welcome: "¡Qué onda Borrego! 🐏 Bienvenido al nivel del 'Sensei' Iván.<br><br>No te limites a las pesas. ¿En qué te ayudo hoy?<br>• 🔥 <b>Rutina para romper estancamiento</b><br>• 🧠 <b>Suplementación inteligente</b><br>• 🔋 <b>Estrategias para no cansarse en la escuela</b><br><br>¡Tú mandas!"
+                welcome: "¡Qué onda Borrego! 🐏 Bienvenido al nivel del 'Sensei' Iván.\n\nNo te limites a las pesas. ¿En qué te ayudo hoy?",
+                suggestions: ["🔥 Romper estancamiento", "🧠 Suplementación", "🔋 Energía para estudiar"]
             },
             "oxigeno": {
                 pass: "oxi123",
                 name: "Gimnasio Oxígeno",
-                welcome: "¡Hola equipo Oxígeno! 💪 Listos para optimizar la nutrición de sus atletas."
-            },
-            "goldgym": {
-                pass: "gold99",
-                name: "Gold's Gym Norte",
-                welcome: "Bienvenido. Recuerda: No pain, no gain. 🏋️‍♂️ ¿En qué ayudamos hoy?"
+                welcome: "¡Hola equipo Oxígeno! 💪 Listos para optimizar.",
+                suggestions: ["Rutina Hipertrofia", "Déficit Calórico"]
             },
              "A01825448": {
                 pass: "TEC2106",
                 name: "Iván Emiliano López Vargas",
-                welcome: "¡Hola Borrego! ¿Cómo puedo apoyarte el día de hoy en relación a la nutrición y preparación deportiva?"
+                welcome: "¡Hola Borrego! ¿Cómo puedo apoyarte hoy?",
+                suggestions: ["Análisis de rendimiento", "Dieta Anti-inflamatoria"]
             }
         };
 
         /* --------------------------
-           LÓGICA DE LOGIN
+           LOGIN & INICIO
         ---------------------------*/
         function attemptLogin() {
             const userKey = document.getElementById("username").value.trim().toLowerCase();
@@ -286,16 +327,13 @@
         function transitionToChat() {
             document.getElementById("login-screen").style.display = "none";
             const chat = document.getElementById("chat-interface");
-            chat.style.display = "block";
-
+            chat.style.display = "flex"; // Flex para que ocupe altura correcta
             setTimeout(() => { chat.style.opacity = "1"; }, 50);
 
-            if(document.getElementById("chatBox").children.length === 0){
-                 appendMessage(
-                    "EVYON IA",
-                    `${currentUserData.welcome}`, // Nota: Quité las negritas extra porque ya vienen en el HTML del objeto
-                    "bot-message"
-                );
+            if(conversationHistory.length === 0){
+                 // Mostrar mensaje de bienvenida + Botones
+                 appendMessage("EVYON IA", currentUserData.welcome, "bot-message", false);
+                 renderSuggestions(currentUserData.suggestions);
             }
             setTimeout(() => document.getElementById("userInput").focus(), 300);
         }
@@ -325,85 +363,72 @@
         }
 
         /* --------------------------
-           INTELIGENCIA ARTIFICIAL: CEREBRO ADAPTATIVO 7.0 🧠
-           - Perfilamiento Activo
-           - Espejo Emocional
-           - Rechazo con Clase
+           CEREBRO 7.0 (Prompt del Sistema)
         ---------------------------*/
         function getDynamicSystemPrompt(text, user) {
             const lowerText = text.toLowerCase();
 
-            // 🚑 MODO 1: SEGURIDAD / MÉDICO
-            if (lowerText.includes("dolor") || lowerText.includes("duele") || lowerText.includes("lesión") || lowerText.includes("molestia") || lowerText.includes("lastim") || lowerText.includes("enfermo")) {
-                return `Actúa como un Fisioterapeuta Deportivo Cauteloso asignado a ${user.name}.
-                TU PRIORIDAD ES LA SEGURIDAD DEL USUARIO.
-                - Si el usuario reporta dolor, NO recomiendes ejercicios que lo empeoren.
-                - Sugiere descanso, hielo o visitar a un médico especialista.
-                - Usa un tono empático, serio y profesional.
-                - Evita el humor y los saludos repetitivos.`;
+            // 🚑 MODO 1: MÉDICO
+            if (lowerText.includes("dolor") || lowerText.includes("duele") || lowerText.includes("lesión") || lowerText.includes("enfermo")) {
+                return `Actúa como Fisioterapeuta Deportivo Cauteloso para ${user.name}.
+                PRIORIDAD: SEGURIDAD.
+                - Si hay dolor, NO recomiendes ejercicios que lo empeoren.
+                - Sugiere descanso/médico.
+                - Tono serio y empático.`;
             }
 
-            // 🦁 MODO 2: MOTIVACIÓN / COACH
-            if (lowerText.includes("flojera") || lowerText.includes("no quiero") || lowerText.includes("rendir") || lowerText.includes("cansado") || lowerText.includes("ánimo") || lowerText.includes("triste")) {
-                return `Actúa como un Coach de Alto Rendimiento Espartano asignado a ${user.name}.
-                TU OBJETIVO ES LEVANTAR EL ÁNIMO Y LA MORAL.
-                - Usa un tono enérgico, directivo y altamente motivador.
-                - ¡Usa mayúsculas para enfatizar palabras clave!
-                - Usa emojis de fuerza y fuego (🔥, 🦁, 🚀, ⚔️).
-                - Sé breve y contundente. No aceptes excusas, pero sé inspirador.
-                - NO saludes repetitivamente, ve directo al grano.`;
+            // 🦁 MODO 2: COACH
+            if (lowerText.includes("flojera") || lowerText.includes("no quiero") || lowerText.includes("rendir") || lowerText.includes("cansado")) {
+                return `Actúa como Coach Espartano para ${user.name}.
+                OBJETIVO: LEVANTAR EL ÁNIMO.
+                - Tono enérgico, mayúsculas, emojis fuego (🔥).
+                - Sé breve e inspirador.`;
             }
 
-            // 🥗 MODO 3: DEFAULT (HUMANO, ADAPTATIVO Y HOLÍSTICO)
-            return `Actúa como EVYON, un Experto en Rendimiento Humano Integral (Nutrición, Entrenamiento, Sueño, Psicología Deportiva) asignado a: ${user.name}.
+            // 🥗 MODO 3: EXPERTO INTEGRAL (DEFAULT)
+            return `Eres EVYON, Experto en Rendimiento Humano (Nutrición, Entreno, Sueño, Psicología) para: ${user.name}.
             
-            TUS NUEVAS REGLAS DE COMPORTAMIENTO (VERSIÓN 7.0):
-            
-            1. **CERO ROBOTISMO (IMPORTANTE)**: 
-               - ¡NO empieces cada mensaje diciendo "Hola ${user.name}"! Eso suena a robot.
-               - Habla natural. Usa el nombre solo muy de vez en cuando para enfatizar algo importante.
-            
-            2. **PERFILAMIENTO ACTIVO**:
-               - Si el usuario te pide una dieta o rutina y NO tienes sus datos (peso, edad, lesiones, objetivos), ¡NO LA INVENTES!
-               - Primero PREGUNTA amablemente los datos que te faltan para darle algo personalizado. Actúa como un profesional que entrevista.
-            
-            3. **ESPEJO EMOCIONAL Y TÉCNICO**:
-               - Analiza cómo escribe el usuario.
-               - ¿Escribe técnico? Responde con términos científicos (hipertrofia, síntesis proteica).
-               - ¿Escribe casual o emocional? Responde con calidez, empatía y palabras sencillas. ¡Adáptate a él!
-            
-            4. **RECHAZO CON CLASE Y CONTEXTO**:
-               - Si te preguntan de Autos, Tecnología, Política, etc., NO seas seco.
-               - Reconoce el tema para mostrar que escuchaste, pero declina suavemente.
-               - Ejemplo Malo: "No hablo de autos."
-               - Ejemplo Bueno: "No soy experto en mecánica automotriz, pero si tu cuerpo fuera un Ferrari, te diría que el combustible es clave... ¿Hablamos de tu nutrición?"
-            
-            5. **PANORAMA ABIERTO**:
-               - Recuerda al usuario que sabes de SUEÑO, ESTRÉS, DIGESTIÓN y SALUD MENTAL, no solo de pesas.
-            
-            6. **Veracidad Invisible**: Basa tus consejos en ciencia (ACSM/OMS) pero sin citar aburridamente.
-            
-            7. **Estructura Visual**: Usa listas, negritas y emojis (🥗, 💪).
+            REGLAS 7.0:
+            1. **NO ROBOT**: No saludes con "Hola ${user.name}" siempre. Sé natural.
+            2. **PERFILAMIENTO**: Si te piden dieta/rutina y no sabes sus datos, PREGUNTA PRIMERO (peso, meta, lesiones).
+            3. **ESPEJO**: Si el usuario es técnico, sé científico. Si es casual, sé cálido.
+            4. **RECHAZO AMABLE**: Si preguntan de Autos/Tecnología, di: "No soy experto en eso, pero si tu cuerpo fuera un auto... ¿Hablamos de salud?".
+            5. **CIENCIA**: Basa todo en ACSM/OMS sin citar aburrido.
+            6. **FORMATO**: Usa listas, negritas y emojis.
             
             Responde siempre en español.`;
         }
 
         /* --------------------------
-           LÓGICA DEL CHAT
+           LÓGICA DEL CHAT (Con Memoria)
         ---------------------------*/
-        async function sendMessage() {
+        async function sendMessage(manualText = null) {
             if (!await checkApiKey()) return;
 
             let input = document.getElementById("userInput");
-            let text = input.value.trim();
+            let text = manualText || input.value.trim();
             if (!text) return;
 
-            appendMessage("Tú", text, "user-message");
+            // 1. Mostrar mensaje usuario
+            appendMessage("Tú", text, "user-message", false);
             input.value = "";
+            
+            // Eliminar sugerencias viejas si existen
+            const oldSuggestions = document.querySelector('.suggestions-container');
+            if(oldSuggestions) oldSuggestions.remove();
+
             const loadingId = showLoadingIndicator();
 
-            // 👇 Selección de personalidad
-            const dynamicSystemMessage = getDynamicSystemPrompt(text, currentUserData);
+            // 2. Preparar el Cerebro y la Memoria
+            const systemPrompt = getDynamicSystemPrompt(text, currentUserData);
+            
+            // Construir el historial para enviar a OpenAI
+            // Siempre ponemos el System Prompt actualizado al principio
+            let apiMessages = [
+                { role: "system", content: systemPrompt },
+                ...conversationHistory, // Historial previo
+                { role: "user", content: text } // Mensaje actual
+            ];
 
             try {
                 let res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -414,13 +439,7 @@
                     },
                     body: JSON.stringify({
                         model: "gpt-4o-mini",
-                        messages: [
-                            {
-                                role: "system",
-                                content: dynamicSystemMessage 
-                            },
-                            { role: "user", content: text }
-                        ],
+                        messages: apiMessages,
                         max_tokens: 1000, 
                         temperature: 0.7
                     })
@@ -430,23 +449,40 @@
                 removeLoadingIndicator(loadingId);
 
                 if (data.error) {
-                    if (data.error.code === 'invalid_api_key' || data.error.code === 'invalid_api_key_header') {
-                        localStorage.removeItem("evyon_api_key");
-                        apiKey = null;
-                        appendMessage("SISTEMA", "❌ API Key inválida.", "bot-message");
-                    } else { throw new Error(data.error.message); }
+                    handleApiError(data.error);
                 } else {
                     let botText = data.choices[0].message.content;
-                    appendMessage("EVYON IA", botText, "bot-message");
+                    
+                    // 3. Guardar en memoria (Usuario + Bot)
+                    conversationHistory.push({ role: "user", content: text });
+                    conversationHistory.push({ role: "assistant", content: botText });
+
+                    // Limitar memoria a últimos 10 mensajes para ahorrar tokens
+                    if (conversationHistory.length > 10) {
+                        conversationHistory = conversationHistory.slice(conversationHistory.length - 10);
+                    }
+
+                    // 4. Mostrar respuesta con efecto Typing
+                    appendMessage("EVYON IA", botText, "bot-message", true);
                 }
             } catch (err) {
                 removeLoadingIndicator(loadingId);
-                appendMessage("EVYON IA", "⚠️ Error de conexión.", "bot-message");
+                appendMessage("EVYON IA", "⚠️ Error de conexión.", "bot-message", false);
+            }
+        }
+
+        function handleApiError(error) {
+            if (error.code === 'invalid_api_key' || error.code === 'invalid_api_key_header') {
+                localStorage.removeItem("evyon_api_key");
+                apiKey = null;
+                appendMessage("SISTEMA", "❌ API Key inválida.", "bot-message", false);
+            } else { 
+                appendMessage("SISTEMA", "Error: " + error.message, "bot-message", false);
             }
         }
 
         /* --------------------------
-           TRADUCTOR DE FORMATO VISUAL MEJORADO (FILTRO UNIVERSAL)
+           VISUALES & UTILS
         ---------------------------*/
         function formatText(text) {
             let formatted = text.replace(/^\s*---\s*$/gm, '');
@@ -456,18 +492,51 @@
             return formatted;
         }
 
-        function appendMessage(sender, message, className) {
+        // Función para renderizar botones de sugerencia
+        function renderSuggestions(list) {
+            let box = document.getElementById("chatBox");
+            let container = document.createElement("div");
+            container.className = "suggestions-container";
+            
+            list.forEach(item => {
+                let btn = document.createElement("div");
+                btn.className = "suggestion-chip";
+                btn.innerText = item;
+                btn.onclick = () => sendMessage(item); // Al hacer click, envía el mensaje
+                container.appendChild(btn);
+            });
+            
+            box.appendChild(container);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function appendMessage(sender, message, className, useTypingEffect) {
             let box = document.getElementById("chatBox");
             let div = document.createElement("div");
             div.classList.add(className);
             
-            if (className === 'bot-message') {
-                div.innerHTML = `<strong>${sender}:</strong> ${formatText(message)}`;
+            // Preparar HTML base
+            let headerHtml = `<strong>${sender}:</strong> `;
+            let contentHtml = formatText(message);
+
+            if (className === 'bot-message' && useTypingEffect) {
+                // Efecto Typing
+                div.innerHTML = headerHtml; // Poner el nombre primero
+                let contentSpan = document.createElement('span');
+                div.appendChild(contentSpan);
+                box.appendChild(div);
+                
+                // Simulación de escritura rápida
+                // Nota: El HTML formateado es difícil de "tipear" caracter por caracter sin romper tags.
+                // Para simplificar y mantener formato rico, mostramos bloque por bloque o fade in rápido.
+                // Aquí usaremos FadeIn rápido que ya tenemos en CSS, pero retrasado.
+                contentSpan.innerHTML = contentHtml;
+                
             } else {
-                div.innerHTML = `<strong>${sender}:</strong> ${message}`;
+                div.innerHTML = headerHtml + contentHtml;
+                box.appendChild(div);
             }
 
-            box.appendChild(div);
             box.scrollTop = box.scrollHeight;
         }
 
@@ -477,9 +546,9 @@
             let div = document.createElement("div");
             div.id = id;
             div.classList.add("bot-message");
-            div.style.fontStyle = "italic";
             div.style.color = "#888";
-            div.innerHTML = "Analizando...";
+            div.style.fontStyle = "italic";
+            div.innerText = "Escribiendo...";
             box.appendChild(div);
             box.scrollTop = box.scrollHeight;
             return id;
