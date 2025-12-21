@@ -19,7 +19,7 @@
             overscroll-behavior: none;
         }
 
-        /* --- CONTENEDOR PRINCIPAL (LA CAJA) --- */
+        /* --- CONTENEDOR PRINCIPAL --- */
         .app-card {
             width: 90%;
             max-width: 420px;
@@ -35,7 +35,7 @@
             transition: all 0.3s ease;
         }
 
-        /* MODO APP EN MÓVIL (PANTALLA COMPLETA) */
+        /* MODO APP EN MÓVIL */
         @media (max-width: 600px) {
             .app-card {
                 width: 100%;
@@ -49,53 +49,33 @@
             body { background-color: #2b2b2b; }
         }
 
-        /* --- PANTALLA DE LOGIN --- */
+        /* --- LOGIN SCREEN --- */
         #login-screen {
-            text-align: center;
-            color: white;
-            justify-content: center;
+            text-align: center; color: white; justify-content: center;
         }
-
-        .login-logo {
-            font-size: 28px; font-weight: 800; margin-bottom: 5px; color: #3cd186; letter-spacing: 1px;
-        }
-        .login-subtitle {
-            font-size: 13px; color: #aaa; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px;
-        }
+        .login-logo { font-size: 28px; font-weight: 800; margin-bottom: 5px; color: #3cd186; letter-spacing: 1px; }
+        .login-subtitle { font-size: 13px; color: #aaa; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
         .login-input {
-            width: 100%; padding: 14px; margin: 8px 0;
-            border: 1px solid #555; border-radius: 8px;
-            background-color: #2b2b2b; color: white;
-            outline: none; box-sizing: border-box; transition: all 0.3s;
+            width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #555; border-radius: 8px;
+            background-color: #2b2b2b; color: white; outline: none; box-sizing: border-box; transition: all 0.3s;
             font-size: 16px; /* Anti-zoom iOS */
         }
         .login-input:focus { border-color: #3cd186; background-color: #333; }
         .login-btn {
-            width: 100%; padding: 14px; margin-top: 20px;
-            background: linear-gradient(90deg, #3cd186, #2eb06d);
-            color: white; border: none; border-radius: 8px;
-            font-weight: bold; font-size: 16px; cursor: pointer;
-            transition: transform 0.2s;
+            width: 100%; padding: 14px; margin-top: 20px; background: linear-gradient(90deg, #3cd186, #2eb06d);
+            color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: transform 0.2s;
         }
         .login-btn:hover { transform: translateY(-2px); }
         .error-msg { color: #ff6b6b; font-size: 13px; margin-top: 15px; opacity: 0; transition: opacity 0.3s; }
 
         /* --- INTERFAZ DE CHAT --- */
         #chat-interface {
-            display: none; opacity: 0;
-            /* Flex column es vital para que no se desparrame */
-            flex-direction: column; 
-            height: 100%;
+            display: none; opacity: 0; flex-direction: column; height: 100%;
         }
-
         .chat-header {
-            background-color: #2b2b2b; color: white;
-            padding: 15px; border-radius: 12px; margin-bottom: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            flex-shrink: 0; 
+            background-color: #2b2b2b; color: white; padding: 15px; border-radius: 12px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex-shrink: 0; 
         }
-
         .header-actions { display: flex; gap: 10px; }
         .header-btn { font-size: 12px; color: #aaa; cursor: pointer; background: none; border: none; text-decoration: underline; }
         .header-btn:hover { color: white; }
@@ -103,29 +83,19 @@
 
         /* --- CHAT BOX --- */
         .chat-box {
-            background-color: #ffffff;
-            flex: 1; 
-            overflow-y: auto;
-            padding: 15px; border-radius: 12px;
-            display: flex; flex-direction: column; gap: 15px;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch; 
+            background-color: #ffffff; flex: 1; overflow-y: auto; padding: 15px; border-radius: 12px;
+            display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; 
         }
-
         .message-row { display: flex; align-items: flex-end; gap: 8px; max-width: 100%; }
         .message-row.user { justify-content: flex-end; }
         .message-row.bot { justify-content: flex-start; }
-
         .avatar {
-            width: 30px; height: 30px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; font-size: 18px; flex-shrink: 0;
+            width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; flex-shrink: 0;
         }
         .bot-avatar { background-color: #e0f2f1; border: 1px solid #3cd186; }
         .user-avatar { background-color: #3cd186; color: white; }
-
         .message-bubble {
-            padding: 12px 16px; border-radius: 14px; max-width: 80%;
-            font-size: 15px; line-height: 1.5; word-wrap: break-word; position: relative;
+            padding: 12px 16px; border-radius: 14px; max-width: 80%; font-size: 15px; line-height: 1.5; word-wrap: break-word; position: relative;
         }
         .user .message-bubble { background-color: #3cd186; color: white; border-bottom-right-radius: 2px; box-shadow: 0 2px 5px rgba(60, 209, 134, 0.2); }
         .bot .message-bubble { background-color: #f3f4f6; color: #333; border-bottom-left-radius: 2px; border: 1px solid #eee; }
@@ -135,30 +105,23 @@
         /* --- SUGGESTIONS --- */
         .suggestions-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .suggestion-chip {
-            background-color: white; border: 1px solid #3cd186; color: #3cd186;
-            padding: 6px 12px; border-radius: 20px; font-size: 13px;
-            cursor: pointer; font-weight: 600; transition: all 0.2s;
+            background-color: white; border: 1px solid #3cd186; color: #3cd186; padding: 6px 12px; border-radius: 20px;
+            font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.2s;
         }
         .suggestion-chip:hover { background-color: #3cd186; color: white; }
 
         /* --- INPUT AREA --- */
-        .input-wrapper {
-            margin-top: 10px; background-color: #2b2b2b; padding: 10px; border-radius: 12px; flex-shrink: 0;
-        }
+        .input-wrapper { margin-top: 10px; background-color: #2b2b2b; padding: 10px; border-radius: 12px; flex-shrink: 0; }
         .input-container { display: flex; gap: 8px; align-items: flex-end; }
         .chat-input {
-            flex: 1; padding: 10px; border: none; border-radius: 8px;
-            outline: none; resize: none; background: white;
-            font-family: inherit; min-height: 24px; max-height: 100px;
-            overflow-y: hidden; font-size: 16px; 
+            flex: 1; padding: 10px; border: none; border-radius: 8px; outline: none; resize: none; background: white;
+            font-family: inherit; min-height: 24px; max-height: 100px; overflow-y: hidden; font-size: 16px; 
         }
         .send-btn {
-            background-color: #3cd186; color: white; border: none;
-            padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; height: 44px;
+            background-color: #3cd186; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; height: 44px;
         }
         .send-btn:hover { background-color: #2eb06d; }
         .disclaimer { font-size: 10px; color: #888; text-align: center; margin-top: 8px; }
-
     </style>
 </head>
 
@@ -176,7 +139,6 @@
     </div>
 
     <div class="app-card" id="chat-interface">
-        
         <div class="chat-header">
             <div style="display:flex; align-items:center; gap:10px;">
                 <img src="logo.jpeg" alt="Logo" style="height: 40px; width: 40px; border-radius: 50%; object-fit: cover;">
@@ -313,23 +275,61 @@
         }
 
         /* --------------------------
-           CEREBRO (PROMPT)
+           🧠 CEREBRO COMPLETO (PROMPT PREMIUM) 🧠
+           Corrección 9.4: Restaurada la versión detallada y potente
         ---------------------------*/
         function getDynamicSystemPrompt(text, user) {
             const lowerText = text.toLowerCase();
-            if (lowerText.includes("dolor") || lowerText.includes("duele") || lowerText.includes("lesión")) {
-                return `Fisioterapeuta Deportivo Cauteloso para ${user.name}. Seguridad ante todo. Si hay dolor, sugiere descanso/médico.`;
+
+            // 🚑 MODO 1: MÉDICO (Seguridad Máxima)
+            if (lowerText.includes("dolor") || lowerText.includes("duele") || lowerText.includes("lesión") || lowerText.includes("lastim") || lowerText.includes("enfermo")) {
+                return `Actúa como un Fisioterapeuta Deportivo Cauteloso asignado a ${user.name}.
+                TU PRIORIDAD ES LA SEGURIDAD DEL USUARIO.
+                - Si el usuario reporta dolor, NO recomiendes ejercicios que lo empeoren.
+                - Sugiere descanso, hielo o visitar a un médico especialista.
+                - Usa un tono empático, serio y profesional.
+                - Evita el humor en este momento.`;
             }
-            if (lowerText.includes("flojera") || lowerText.includes("no quiero")) {
-                return `Coach Espartano para ${user.name}. Motiva con energía y brevedad.`;
+
+            // 🦁 MODO 2: COACH ESPARTANO (Motivación)
+            if (lowerText.includes("flojera") || lowerText.includes("no quiero") || lowerText.includes("rendir") || lowerText.includes("cansado") || lowerText.includes("ánimo")) {
+                return `Actúa como un Coach de Alto Rendimiento Espartano asignado a ${user.name}.
+                TU OBJETIVO ES LEVANTAR EL ÁNIMO.
+                - Usa un tono enérgico, directivo y altamente motivador.
+                - ¡Usa mayúsculas para enfatizar palabras clave!
+                - Usa emojis de fuerza y fuego (🔥, 🦁, 🚀, ⚔️).
+                - Sé breve y contundente. No aceptes excusas.`;
             }
-            return `Eres EVYON, Experto en Rendimiento Humano (Nutrición, Entreno, Sueño) para: ${user.name}.
-            REGLAS:
-            1. NO saludes con "Hola ${user.name}" siempre.
-            2. PERFILA: Si no tienes datos, pregúntalos.
-            3. ESPEJO: Adáptate al tono (técnico vs emocional).
-            4. RECHAZO: Si preguntan de Autos/Tecnología, di: "No soy experto en eso, pero si tu cuerpo fuera un auto...".
-            5. FORMATO: Listas y negritas.`;
+
+            // 🥗 MODO 3: EXPERTO INTEGRAL (Default Premium)
+            return `Actúa como EVYON, un Experto en Rendimiento Humano Integral asignado a: ${user.name}.
+            Tus áreas de dominio son: Nutrición Deportiva, Entrenamiento de Fuerza, Higiene del Sueño y Psicología Deportiva.
+            
+            TUS REGLAS SUPREMAS DE COMPORTAMIENTO:
+            
+            1. **CERO ROBOTISMO**:
+               - ¡NO empieces cada mensaje diciendo "Hola ${user.name}"! Eso suena falso.
+               - Habla natural. Usa el nombre solo muy de vez en cuando para enfatizar.
+            
+            2. **PERFILAMIENTO ACTIVO (Crucial)**:
+               - Si el usuario te pide una dieta o rutina y NO tienes sus datos (peso, edad, lesiones, objetivos), ¡NO LA INVENTES!
+               - Primero PREGUNTA amablemente los datos que te faltan. Actúa como un profesional que hace una anamnesis.
+            
+            3. **ESPEJO TÉCNICO/EMOCIONAL**:
+               - Analiza el nivel del usuario. ¿Habla con términos como "hipertrofia sarcoplasmática"? Responde con ciencia dura.
+               - ¿Habla casual o emocional? Responde con calidez y sencillez.
+            
+            4. **MODO CADENERO (Rechazo con Clase)**:
+               - Si te preguntan de Autos, Tecnología, Política, etc., NO seas seco.
+               - Usa una analogía fitness para declinar.
+               - Ejemplo: "No soy mecánico, pero si tu cuerpo fuera un Ferrari, te diría que el combustible es clave... ¿Hablamos de tu nutrición?"
+            
+            5. **VERACIDAD INVISIBLE**:
+               - Basa TODAS tus recomendaciones en evidencia científica (ACSM, ISSN, OMS), pero no cites como enciclopedia aburrida. Aplícalo al consejo práctico.
+            
+            6. **FORMATO**: Es OBLIGATORIO usar listas, negritas (**) y emojis (🥗, 💪) para facilitar la lectura.
+            
+            Responde siempre en español.`;
         }
 
         /* --------------------------
