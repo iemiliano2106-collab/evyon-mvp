@@ -6,198 +6,252 @@
     <title>EVYON IA - Acceso Institucional</title>
 
     <style>
-        /* --- ESTILOS GENERALES --- */
+        /* --- FUENTES & RESET --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         html, body {
             font-family: 'Inter', sans-serif;
-            background-color: #eef1f5;
-            height: 100%; 
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; 
-            overscroll-behavior: none;
-            /* Fija la base para evitar saltos */
-            position: fixed; 
-            top: 0;
-            left: 0;
+            height: 100%; width: 100%;
+            margin: 0; padding: 0;
+            overflow: hidden;
+            position: fixed; top: 0; left: 0;
+            /* Fondo Moderno Animado */
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #000000 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #ffffff;
         }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* --- CONTENEDOR PRINCIPAL --- */
+        body { display: flex; justify-content: center; align-items: center; }
+
+        /* --- CONTENEDOR PRINCIPAL (GLASSMORPHISM) --- */
         .app-card {
-            width: 90%;
-            max-width: 420px;
-            background-color: #3D3D3D;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.4);
+            width: 95%; max-width: 450px;
+            height: 90vh; max-height: 850px;
+            /* Efecto Vidrio Tecnológico */
+            background: rgba(20, 20, 20, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(60, 209, 134, 0.05); /* Glow sutil */
+            
+            display: flex; flex-direction: column;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            height: 90vh; 
-            max-height: 800px;
+            overflow: hidden;
             transition: all 0.3s ease;
-            /* Asegura que el padding no rompa el ancho en desktop también */
-            box-sizing: border-box; 
         }
 
-        /* 🔒 FIX 9.7: MODO APP EN MÓVIL (CENTRADITO) */
+        /* MODO MÓVIL OPTIMIZADO */
         @media (max-width: 600px) {
             .app-card {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                max-width: none;
-                max-height: none;
-                border-radius: 0;
-                padding: 15px;
-                box-shadow: none;
-                margin: 0;
-                /* 👇 ESTA LÍNEA ARREGLA EL DESFASE A LA DERECHA 👇 */
-                box-sizing: border-box; 
+                width: 100%; height: 100%;
+                border-radius: 0; border: none;
+                background: rgba(15, 15, 15, 0.85); /* Un poco más oscuro en móvil */
             }
-            body { background-color: #2b2b2b; }
         }
 
         /* --- LOGIN SCREEN --- */
         #login-screen {
-            text-align: center;
-            color: white;
-            justify-content: center;
-            overflow-y: auto; 
-        }
-
-        .login-logo { font-size: 28px; font-weight: 800; margin-bottom: 5px; color: #3cd186; letter-spacing: 1px; }
-        .login-subtitle { font-size: 13px; color: #aaa; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; }
-        .login-input {
-            width: 100%; padding: 14px; margin: 8px 0;
-            border: 1px solid #555; border-radius: 8px;
-            background-color: #2b2b2b; color: white;
-            outline: none; box-sizing: border-box; transition: all 0.3s;
-            font-size: 16px; 
-        }
-        .login-input:focus { border-color: #3cd186; background-color: #333; }
-        .login-btn {
-            width: 100%; padding: 14px; margin-top: 20px;
-            background: linear-gradient(90deg, #3cd186, #2eb06d);
-            color: white; border: none; border-radius: 8px;
-            font-weight: bold; font-size: 16px; cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .login-btn:hover { transform: translateY(-2px); }
-        .error-msg { color: #ff6b6b; font-size: 13px; margin-top: 15px; opacity: 0; transition: opacity 0.3s; }
-
-        /* --- INTERFAZ DE CHAT --- */
-        #chat-interface {
-            display: none; opacity: 0;
-            flex-direction: column;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 40px; text-align: center;
             height: 100%;
-            overflow: hidden; 
         }
 
+        .login-logo {
+            font-size: 32px; font-weight: 800;
+            background: linear-gradient(to right, #3cd186, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px; letter-spacing: -1px;
+        }
+
+        .login-subtitle { font-size: 12px; color: #8899a6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 40px; }
+
+        .login-input {
+            width: 100%; padding: 16px; margin: 10px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; color: white;
+            font-size: 16px; outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .login-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #3cd186;
+            box-shadow: 0 0 15px rgba(60, 209, 134, 0.2);
+        }
+
+        .login-btn {
+            width: 100%; padding: 16px; margin-top: 25px;
+            background: linear-gradient(90deg, #3cd186, #22c55e);
+            color: #000; border: none; border-radius: 12px;
+            font-weight: 800; font-size: 16px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(60, 209, 134, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(60, 209, 134, 0.4); }
+        .error-msg { color: #ff6b6b; font-size: 13px; margin-top: 20px; min-height: 20px; transition: opacity 0.3s; opacity: 0; }
+
+        /* --- INTERFAZ CHAT --- */
+        #chat-interface {
+            display: none; flex-direction: column; height: 100%; opacity: 0; transition: opacity 0.5s ease;
+        }
+
+        /* Header Minimalista Flotante */
         .chat-header {
-            background-color: #2b2b2b; color: white;
-            padding: 15px; border-radius: 12px; margin-bottom: 10px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            flex-shrink: 0; 
+            z-index: 10;
         }
 
-        .header-actions { display: flex; gap: 10px; }
-        .header-btn { font-size: 12px; color: #aaa; cursor: pointer; background: none; border: none; text-decoration: underline; }
-        .header-btn:hover { color: white; }
+        .header-actions { display: flex; gap: 15px; }
+        .header-btn {
+            background: none; border: none; color: #8899a6;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: color 0.2s;
+        }
+        .header-btn:hover { color: #fff; text-decoration: none; }
         .btn-clear:hover { color: #ff6b6b; }
 
-        /* --- CHAT BOX --- */
+        /* Chat Area */
         .chat-box {
-            background-color: #ffffff;
-            flex: 1; 
-            overflow-y: auto;
-            padding: 15px; border-radius: 12px;
-            display: flex; flex-direction: column; gap: 15px;
+            flex: 1; overflow-y: auto; padding: 20px;
+            display: flex; flex-direction: column; gap: 18px;
             scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch; 
         }
 
-        .message-row { display: flex; align-items: flex-end; gap: 8px; max-width: 100%; }
+        /* Scrollbar Personalizado (Sleek) */
+        .chat-box::-webkit-scrollbar { width: 6px; }
+        .chat-box::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        .chat-box::-webkit-scrollbar-track { background: transparent; }
+
+        /* Mensajes */
+        .message-row { 
+            display: flex; align-items: flex-end; gap: 10px; max-width: 100%; 
+            animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .message-row.user { justify-content: flex-end; }
-        .message-row.bot { justify-content: flex-start; }
-
+        
         .avatar {
-            width: 30px; height: 30px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; font-size: 18px; flex-shrink: 0;
+            width: 32px; height: 32px; border-radius: 10px;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        .bot-avatar { background-color: #e0f2f1; border: 1px solid #3cd186; }
-        .user-avatar { background-color: #3cd186; color: white; }
+        .bot-avatar { background: #1e293b; color: #3cd186; border: 1px solid rgba(60, 209, 134, 0.3); }
+        .user-avatar { background: #3cd186; color: #000; }
 
         .message-bubble {
-            padding: 12px 16px; border-radius: 14px; max-width: 80%;
-            font-size: 15px; line-height: 1.5; word-wrap: break-word; position: relative;
+            padding: 14px 18px; border-radius: 18px; max-width: 85%;
+            font-size: 15px; line-height: 1.5; position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .user .message-bubble { background-color: #3cd186; color: white; border-bottom-right-radius: 2px; box-shadow: 0 2px 5px rgba(60, 209, 134, 0.2); }
-        .bot .message-bubble { background-color: #f3f4f6; color: #333; border-bottom-left-radius: 2px; border: 1px solid #eee; }
-        .chat-title { font-weight: 800; color: #1b5e20; margin-top: 10px; display: block; }
-        strong { font-weight: 700; }
 
-        /* --- SUGGESTIONS --- */
+        /* Burbujas Estilizadas */
+        .bot .message-bubble {
+            background: rgba(255, 255, 255, 0.08); /* Gris oscuro translúcido */
+            color: #e2e8f0;
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .user .message-bubble {
+            background: linear-gradient(135deg, #3cd186, #22c55e); /* Gradiente Verde EVYON */
+            color: #0f172a; font-weight: 500;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 15px rgba(60, 209, 134, 0.2);
+        }
+
+        .chat-title { font-weight: 800; color: #3cd186; margin-top: 15px; margin-bottom: 5px; font-size: 1.1em; letter-spacing: -0.5px; }
+        strong { color: #fff; font-weight: 700; }
+        .user strong { color: #000; } /* Strong en burbuja usuario */
+
+        /* Sugerencias (Chips) */
         .suggestions-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .suggestion-chip {
-            background-color: white; border: 1px solid #3cd186; color: #3cd186;
-            padding: 6px 12px; border-radius: 20px; font-size: 13px;
-            cursor: pointer; font-weight: 600; transition: all 0.2s;
+            background: rgba(60, 209, 134, 0.1);
+            border: 1px solid rgba(60, 209, 134, 0.3);
+            color: #3cd186; padding: 8px 16px;
+            border-radius: 20px; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
         }
-        .suggestion-chip:hover { background-color: #3cd186; color: white; }
+        .suggestion-chip:hover { background: #3cd186; color: #000; transform: translateY(-2px); }
 
-        /* --- INPUT AREA --- */
+        /* Input Area Flotante */
         .input-wrapper {
-            margin-top: 10px; background-color: #2b2b2b; padding: 10px; border-radius: 12px; flex-shrink: 0;
-            padding-bottom: env(safe-area-inset-bottom); 
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .input-container { display: flex; gap: 8px; align-items: flex-end; }
-        .chat-input {
-            flex: 1; padding: 10px; border: none; border-radius: 8px;
-            outline: none; resize: none; background: white;
-            font-family: inherit; min-height: 24px; max-height: 100px;
-            overflow-y: hidden; font-size: 16px; 
-        }
-        .send-btn {
-            background-color: #3cd186; color: white; border: none;
-            padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; height: 44px;
-        }
-        .send-btn:hover { background-color: #2eb06d; }
-        .disclaimer { font-size: 10px; color: #888; text-align: center; margin-top: 8px; }
 
+        .input-container {
+            display: flex; gap: 10px; align-items: flex-end;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px; border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: border-color 0.3s;
+        }
+        .input-container:focus-within { border-color: rgba(60, 209, 134, 0.5); }
+
+        .chat-input {
+            flex: 1; background: transparent; border: none;
+            color: white; padding: 12px; font-family: inherit; font-size: 16px;
+            max-height: 120px; outline: none; resize: none;
+        }
+        .chat-input::placeholder { color: #64748b; }
+
+        .send-btn {
+            background: #3cd186; color: #000; border: none;
+            width: 40px; height: 40px; border-radius: 12px;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; font-size: 18px; transition: all 0.2s;
+        }
+        .send-btn:hover { background: #ffffff; transform: scale(1.05); }
+
+        .disclaimer { font-size: 10px; color: #64748b; text-align: center; margin-top: 10px; }
     </style>
 </head>
 
 <body>
 
     <div class="app-card" id="login-screen">
-        <div class="login-logo">EVYON IA 🔒</div>
-        <div class="login-subtitle">Acceso Institucional Seguro</div>
+        <div class="login-logo">EVYON IA</div>
+        <div class="login-subtitle">Neural Access System</div>
 
-        <input type="text" id="username" class="login-input" placeholder="Usuario / ID" onkeydown="handleLoginKey(event)">
-        <input type="password" id="password" class="login-input" placeholder="Contraseña" onkeydown="handleLoginKey(event)">
+        <input type="text" id="username" class="login-input" placeholder="ID de Usuario" onkeydown="handleLoginKey(event)" autocomplete="off">
+        <input type="password" id="password" class="login-input" placeholder="Contraseña de Acceso" onkeydown="handleLoginKey(event)">
         
-        <div id="loginError" class="error-msg">Credenciales incorrectas</div>
-        <button class="login-btn" onclick="attemptLogin()">INGRESAR</button>
+        <div id="loginError" class="error-msg">Acceso Denegado</div>
+        <button class="login-btn" onclick="attemptLogin()">INICIAR SISTEMA</button>
     </div>
 
     <div class="app-card" id="chat-interface">
         <div class="chat-header">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <img src="logo.jpeg" alt="Logo" style="height: 40px; width: 40px; border-radius: 50%; object-fit: cover;">
-                <span style="font-weight:bold; font-size:18px;">EVYON IA</span>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <img src="logo.jpeg" alt="Logo" style="height: 38px; width: 38px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+                <div style="display:flex; flex-direction:column;">
+                    <span style="font-weight:700; font-size:16px; letter-spacing:0.5px;">EVYON</span>
+                    <span style="font-size:10px; color:#3cd186; font-weight:600;">EN LÍNEA ●</span>
+                </div>
             </div>
             <div class="header-actions">
-                <button class="header-btn btn-clear" onclick="clearChat()">Limpiar Chat</button>
+                <button class="header-btn btn-clear" onclick="clearChat()">Reiniciar</button>
                 <button class="header-btn" onclick="logout()">Salir</button>
             </div>
         </div>
@@ -206,16 +260,16 @@
 
         <div class="input-wrapper">
             <div class="input-container">
-                <textarea id="userInput" class="chat-input" placeholder="Escribe aquí..." rows="1" oninput="autoResize(this)" onkeydown="handleChatKey(event)"></textarea>
+                <textarea id="userInput" class="chat-input" placeholder="Escribe tu comando..." rows="1" oninput="autoResize(this)" onkeydown="handleChatKey(event)"></textarea>
                 <button class="send-btn" onclick="sendMessage()">➤</button>
             </div>
-            <div class="disclaimer">EVYON te acompaña con recomendaciones basadas en ciencia y bienestar, pero no reemplaza la consulta con un médico o especialista de la salud.</div>
+            <div class="disclaimer">EVYON optimiza tu rendimiento, pero no sustituye asesoría médica profesional.</div>
         </div>
     </div>
 
     <script>
         /* --------------------------
-           CONFIGURACIÓN Y DATOS
+           CONFIGURACIÓN Y DATOS (LÓGICA INTACTA)
         ---------------------------*/
         let apiKey = localStorage.getItem("evyon_api_key");
         let currentUserData = null;
@@ -515,13 +569,9 @@
 
             box.appendChild(row);
 
-            // --- AQUÍ ESTÁ EL TRUCO VISUAL ---
             if (type === 'user') {
-                // Si escribes tú, bajamos hasta el fondo
                 box.scrollTop = box.scrollHeight;
             } else {
-                // Si responde el BOT, alineamos la vista al INICIO de su mensaje
-                // Esto asegura que leas desde el principio, aunque el texto sea largo.
                 setTimeout(() => {
                     row.scrollIntoView({ behavior: "smooth", block: "start" });
                 }, 100); 
@@ -534,7 +584,7 @@
             let row = document.createElement("div");
             row.className = "message-row bot";
             row.id = id;
-            row.innerHTML = `<div class="avatar bot-avatar">🤖</div><div class="message-bubble" style="color:#888; font-style:italic;">Escribiendo...</div>`;
+            row.innerHTML = `<div class="avatar bot-avatar">🤖</div><div class="message-bubble" style="color:#8899a6; font-style:italic; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.05);">Procesando...</div>`;
             box.appendChild(row);
             box.scrollTop = box.scrollHeight;
             return id;
