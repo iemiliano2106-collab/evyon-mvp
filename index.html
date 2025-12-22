@@ -504,12 +504,7 @@
             bubble.className = "message-bubble";
             
             let formattedHtml = formatText(message);
-
-            if (type === 'bot' && useTyping) {
-                bubble.innerHTML = formattedHtml;
-            } else {
-                bubble.innerHTML = formattedHtml;
-            }
+            bubble.innerHTML = formattedHtml;
 
             if (type === 'bot') {
                 row.appendChild(avatar);
@@ -519,7 +514,18 @@
             }
 
             box.appendChild(row);
-            box.scrollTop = box.scrollHeight;
+
+            // --- AQUÍ ESTÁ EL TRUCO VISUAL ---
+            if (type === 'user') {
+                // Si escribes tú, bajamos hasta el fondo
+                box.scrollTop = box.scrollHeight;
+            } else {
+                // Si responde el BOT, alineamos la vista al INICIO de su mensaje
+                // Esto asegura que leas desde el principio, aunque el texto sea largo.
+                setTimeout(() => {
+                    row.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 100); 
+            }
         }
 
         function showLoadingIndicator() {
