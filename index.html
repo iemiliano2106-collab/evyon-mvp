@@ -553,22 +553,39 @@
 
             let avatar = document.createElement("div");
             avatar.className = `avatar ${type}-avatar`;
-           // --- INICIO DEL NUEVO CÓDIGO (Opción A) ---
-    if (type === 'bot') {
-        // Icono "Chispa" vectorial (SVG) en color verde EVYON
-        avatar.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3cd186" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-    <path d="M12 8v8"/><path d="M8 12l4-4 4 4"/>
-</svg>`;
-        
-        // Estilos extra para que se vea fino (fondo transparente sutil)
-        avatar.style.background = "rgba(60, 209, 134, 0.1)"; 
-        avatar.style.border = "1px solid rgba(60, 209, 134, 0.2)";
-        avatar.style.boxShadow = "none"; // Quitamos sombras pesadas
-    } else {
-        avatar.innerHTML = '👤'; // Icono del usuario se mantiene igual
-    }
-    // --- FIN DEL NUEVO CÓDIGO ---
+           // --- INICIO DEL NUEVO CÓDIGO (Opción Bio-Luz) ---
+            if (type === 'bot') {
+                avatar.innerHTML = ""; // Sin dibujo, solo luz pura
+                
+                // Estilo base del punto de luz
+                avatar.style.background = "#3cd186";
+                avatar.style.borderRadius = "50%";
+                avatar.style.width = "12px"; 
+                avatar.style.height = "12px";
+                avatar.style.margin = "10px"; // Ajuste para centrarlo
+                
+                // La magia: Sombra animada (efecto respiración)
+                avatar.style.boxShadow = "0 0 0 rgba(60, 209, 134, 0.4)";
+                avatar.style.animation = "pulse-green 2s infinite";
+                avatar.style.border = "none";
+                
+                // Inyectamos la animación (keyframes) en el documento una sola vez
+                if (!document.getElementById('anim-style')) {
+                    let style = document.createElement('style');
+                    style.id = 'anim-style';
+                    style.innerHTML = `
+                        @keyframes pulse-green {
+                            0% { box-shadow: 0 0 0 0 rgba(60, 209, 134, 0.7); }
+                            70% { box-shadow: 0 0 0 10px rgba(60, 209, 134, 0); }
+                            100% { box-shadow: 0 0 0 0 rgba(60, 209, 134, 0); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            } else {
+                avatar.innerHTML = '👤'; // Icono del usuario
+            }
+            // --- FIN DEL NUEVO CÓDIGO ---
 
             let bubble = document.createElement("div");
             bubble.className = "message-bubble";
