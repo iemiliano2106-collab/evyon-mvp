@@ -553,7 +553,21 @@
 
             let avatar = document.createElement("div");
             avatar.className = `avatar ${type}-avatar`;
-            avatar.innerHTML = type === 'user' ? '👤' : '🤖';
+           // --- INICIO DEL NUEVO CÓDIGO (Opción A) ---
+    if (type === 'bot') {
+        // Icono "Chispa" vectorial (SVG) en color verde EVYON
+        avatar.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#3cd186" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L14.4 8.6C14.6 9.2 15 9.6 15.6 9.8L22 12L15.6 14.2C15 14.4 14.6 14.8 14.4 15.4L12 22L9.6 15.4C9.4 14.8 9 14.4 8.4 14.2L2 12L8.4 9.8C9 9.6 9.4 9.2 9.6 8.6L12 2Z"/>
+        </svg>`;
+        
+        // Estilos extra para que se vea fino (fondo transparente sutil)
+        avatar.style.background = "rgba(60, 209, 134, 0.1)"; 
+        avatar.style.border = "1px solid rgba(60, 209, 134, 0.2)";
+        avatar.style.boxShadow = "none"; // Quitamos sombras pesadas
+    } else {
+        avatar.innerHTML = '👤'; // Icono del usuario se mantiene igual
+    }
+    // --- FIN DEL NUEVO CÓDIGO ---
 
             let bubble = document.createElement("div");
             bubble.className = "message-bubble";
