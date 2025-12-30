@@ -554,31 +554,30 @@
             let avatar = document.createElement("div");
             avatar.className = `avatar ${type}-avatar`;
            // --- INICIO DEL NUEVO CÓDIGO (Opción Bio-Luz) ---
-            // --- OPCIÓN 1: REACTOR HEXAGONAL ---
+            // --- OPCIÓN 2: HALO ORBITAL ---
             if (type === 'bot') {
-                // Usamos un caracter Hexágono sólido y lo hacemos brillar
-                avatar.innerHTML = "⬢"; 
+                avatar.innerHTML = ""; 
                 
-                // Estilos para que parezca luz
-                avatar.style.color = "#3cd186";
-                avatar.style.fontSize = "24px"; // Tamaño grande
-                avatar.style.display = "flex";
-                avatar.style.alignItems = "center";
-                avatar.style.justifyContent = "center";
+                // Círculo vacío
+                avatar.style.width = "18px";
+                avatar.style.height = "18px";
+                avatar.style.borderRadius = "50%";
+                avatar.style.border = "2px solid #3cd186"; // El anillo físico
                 avatar.style.background = "transparent";
-                avatar.style.border = "none";
+                avatar.style.margin = "6px";
                 
-                // Animación de resplandor (Glow) usando filtro de sombra
-                avatar.style.animation = "hex-glow 2s infinite alternate";
+                // Doble brillo (interno y externo)
+                avatar.style.boxShadow = "0 0 10px #3cd186, inset 0 0 10px #3cd186";
+                avatar.style.animation = "halo-pulse 3s infinite ease-in-out";
                 
-                // Definimos la animación específica para texto/forma
-                if (!document.getElementById('anim-hex')) {
+                if (!document.getElementById('anim-halo')) {
                     let style = document.createElement('style');
-                    style.id = 'anim-hex';
+                    style.id = 'anim-halo';
                     style.innerHTML = `
-                        @keyframes hex-glow {
-                            0% { text-shadow: 0 0 5px rgba(60, 209, 134, 0.5); transform: scale(0.95); }
-                            100% { text-shadow: 0 0 20px rgba(60, 209, 134, 1), 0 0 10px #3cd186; transform: scale(1.05); }
+                        @keyframes halo-pulse {
+                            0% { box-shadow: 0 0 5px #3cd186, inset 0 0 5px #3cd186; opacity: 0.6; }
+                            50% { box-shadow: 0 0 20px #3cd186, inset 0 0 15px #3cd186; opacity: 1; border-color: #fff; }
+                            100% { box-shadow: 0 0 5px #3cd186, inset 0 0 5px #3cd186; opacity: 0.6; }
                         }
                     `;
                     document.head.appendChild(style);
