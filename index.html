@@ -557,8 +557,9 @@
     if (type === 'bot') {
         // Icono "Chispa" vectorial (SVG) en color verde EVYON
         avatar.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3cd186" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M2 12c0-3.5 2.5-6 5.5-6S12 9 12 12s2.5 6 5.5 6 5.5-2.5 5.5-6"/>
-    <path d="M2 12c0 3.5 2.5 6 5.5 6S12 15 12 12s2.5-6 5.5-6 5.5 2.5 5.5 6"/>
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M12 9V3"/><path d="M12 21v-6"/><path d="M9 12H3"/><path d="M21 12h-6"/>
+    <path d="M14.1 14.1L18.4 18.4"/><path d="M5.6 18.4l4.3-4.3"/><path d="M14.1 9.9l4.3-4.3"/><path d="M5.6 5.6l4.3 4.3"/>
 </svg>`;
         
         // Estilos extra para que se vea fino (fondo transparente sutil)
