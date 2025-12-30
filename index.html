@@ -554,36 +554,37 @@
             let avatar = document.createElement("div");
             avatar.className = `avatar ${type}-avatar`;
            // --- INICIO DEL NUEVO CÓDIGO (Opción Bio-Luz) ---
+            // --- OPCIÓN 1: REACTOR HEXAGONAL ---
             if (type === 'bot') {
-                avatar.innerHTML = ""; // Sin dibujo, solo luz pura
+                // Usamos un caracter Hexágono sólido y lo hacemos brillar
+                avatar.innerHTML = "⬢"; 
                 
-                // Estilo base del punto de luz
-                avatar.style.background = "#3cd186";
-                avatar.style.borderRadius = "50%";
-                avatar.style.width = "12px"; 
-                avatar.style.height = "12px";
-                avatar.style.margin = "10px"; // Ajuste para centrarlo
-                
-                // La magia: Sombra animada (efecto respiración)
-                avatar.style.boxShadow = "0 0 0 rgba(60, 209, 134, 0.4)";
-                avatar.style.animation = "pulse-green 2s infinite";
+                // Estilos para que parezca luz
+                avatar.style.color = "#3cd186";
+                avatar.style.fontSize = "24px"; // Tamaño grande
+                avatar.style.display = "flex";
+                avatar.style.alignItems = "center";
+                avatar.style.justifyContent = "center";
+                avatar.style.background = "transparent";
                 avatar.style.border = "none";
                 
-                // Inyectamos la animación (keyframes) en el documento una sola vez
-                if (!document.getElementById('anim-style')) {
+                // Animación de resplandor (Glow) usando filtro de sombra
+                avatar.style.animation = "hex-glow 2s infinite alternate";
+                
+                // Definimos la animación específica para texto/forma
+                if (!document.getElementById('anim-hex')) {
                     let style = document.createElement('style');
-                    style.id = 'anim-style';
+                    style.id = 'anim-hex';
                     style.innerHTML = `
-                        @keyframes pulse-green {
-                            0% { box-shadow: 0 0 0 0 rgba(60, 209, 134, 0.7); }
-                            70% { box-shadow: 0 0 0 10px rgba(60, 209, 134, 0); }
-                            100% { box-shadow: 0 0 0 0 rgba(60, 209, 134, 0); }
+                        @keyframes hex-glow {
+                            0% { text-shadow: 0 0 5px rgba(60, 209, 134, 0.5); transform: scale(0.95); }
+                            100% { text-shadow: 0 0 20px rgba(60, 209, 134, 1), 0 0 10px #3cd186; transform: scale(1.05); }
                         }
                     `;
                     document.head.appendChild(style);
                 }
             } else {
-                avatar.innerHTML = '👤'; // Icono del usuario
+                avatar.innerHTML = '👤';
             }
             // --- FIN DEL NUEVO CÓDIGO ---
 
