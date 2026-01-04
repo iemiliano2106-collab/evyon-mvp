@@ -208,15 +208,16 @@
             color: #0f172a; font-weight: 500;
             border-bottom-right-radius: 4px;
             
-            /* CAMBIO TÉCNICO: */
-            /* 1. Quitamos box-shadow (causa la línea) */
+            /* --- CORRECCIÓN TÉCNICA --- */
+            /* 1. Apagamos el box-shadow que causa la línea */
             box-shadow: none; 
             
-            /* 2. Usamos filter (más preciso, no deja rastros) */
-            filter: drop-shadow(0 4px 6px rgba(60, 209, 134, 0.3));
+            /* 2. Usamos drop-shadow: Calcula la sombra pixel por pixel, no estira cajas */
+            filter: drop-shadow(0 4px 6px rgba(60, 209, 134, 0.4));
             
-            /* 3. Estabilizador final para Safari/Chrome */
-            transform: translateZ(0);
+            /* 3. Forzamos a la GPU a preparar esta capa antes de pintarla */
+            transform: translateZ(0); 
+            will-change: filter;
         }
 
         .chat-title { font-weight: 800; color: #3cd186; margin-top: 15px; margin-bottom: 5px; font-size: 1.1em; letter-spacing: -0.5px; }
