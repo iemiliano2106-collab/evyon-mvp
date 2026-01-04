@@ -133,20 +133,18 @@
         .chat-box {
             flex: 1; 
             overflow-y: auto; 
-            
-            /* CAMBIO AQUÍ: */
-            /* Antes tenías: padding: 20px; */
-            /* Ahora usamos 20px arriba/abajo y 10px a los lados */
             padding: 20px 10px; 
-            
             display: flex; 
             flex-direction: column; 
             gap: 18px;
             scroll-behavior: smooth;
+            scrollbar-gutter: stable;
             
-            /* TRUCO EXTRA: */
-            /* Esto evita el salto brusco reservando el espacio del scroll siempre */
-            scrollbar-gutter: stable; 
+            /* ☢️ LA SOLUCIÓN NUCLEAR ☢️ */
+            /* Esto crea un nuevo contexto de apilamiento. 
+               Evita que los brillos de adentro se mezclen mal con el vidrio de afuera. */
+            isolation: isolate; 
+            z-index: 1;
         }
 
         /* Scrollbar Personalizado (Sleek) */
@@ -162,20 +160,14 @@
             align-items: flex-end; 
             gap: 10px; 
             max-width: 100%;
-            /* Solo dejamos la animación, quitamos cualquier "transform" o "will-change" de aquí */
-            animation: revealIn 0.25s ease-out both;
+            
+            /* Usamos FadeIn simple. Sin movimiento = Sin líneas de rastro. */
+            animation: fadeIn 0.3s ease-out both;
         }
-        /* 🚀 SOLUCIÓN RECOMENDADA POR IA: REVEAL-IN 
-           Usamos clip-path en lugar de transform para evitar el glitch gráfico */
-        @keyframes revealIn {
-            from { 
-                opacity: 0; 
-                clip-path: inset(0 0 100% 0); /* Oculto desde abajo */
-            }
-            to { 
-                opacity: 1; 
-                clip-path: inset(0 0 0 0); /* Totalmente visible */
-            }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .message-row.user { justify-content: flex-end; }
