@@ -155,13 +155,23 @@
         .chat-box::-webkit-scrollbar-track { background: transparent; }
 
         /* Mensajes */
-        .message-row { 
-            display: flex; align-items: flex-end; gap: 10px; max-width: 100%; 
-            animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-            /* PEGA ESTO AQUÍ: */
-            will-change: transform, opacity;
-            transform: translateZ(0);
-            backface-visibility: hidden;
+        /* Busca esto en tu código (aprox línea 158) y déjalo así: */
+
+.message-row {
+    display: flex; 
+    align-items: flex-end; 
+    gap: 10px; 
+    max-width: 100%;
+    animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+
+    /* --- 🛡️ INICIO DEL PARCHE ANTI-GLITCH --- */
+    /* Estas son las líneas que FALTAN en tu foto: */
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0); /* Refuerzo para Mac */
+    backface-visibility: hidden;
+    /* --- 🛡️ FIN DEL PARCHE --- */
+}
         }
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
