@@ -158,20 +158,12 @@
         /* Busca esto en tu código (aprox línea 158) y déjalo así: */
 
         .message-row {
-        display: flex; 
-        align-items: flex-end; 
-        gap: 10px; 
-        max-width: 100%;
-        animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-
-        /* --- 🛡️ INICIO DEL PARCHE ANTI-GLITCH --- */
-        /* Estas son las líneas que FALTAN en tu foto: */
-        will-change: transform, opacity;
-        transform: translateZ(0);
-        -webkit-transform: translateZ(0); /* Refuerzo para Mac */
-        backface-visibility: hidden;
-        /* --- 🛡️ FIN DEL PARCHE --- */
-
+            display: flex; 
+            align-items: flex-end; 
+            gap: 10px; 
+            max-width: 100%;
+            /* Solo dejamos la animación, quitamos cualquier "transform" o "will-change" de aquí */
+            animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
         }
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -186,17 +178,24 @@
         .user-avatar { background: #3cd186; color: #000; }
 
         .message-bubble {
-            padding: 10px 16px; /* Reduje el padding vertical de 14px a 10px */
+            padding: 10px 16px;
             border-radius: 18px;
             max-width: 85%;
             font-size: 15px;
-            line-height: 1.4; /* Ajuste para que el texto no se estire tanto */
+            line-height: 1.4;
             position: relative;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             
-            /* NUEVO: Esto asegura que la burbuja se abrace al texto */
             width: fit-content; 
             word-wrap: break-word;
+
+            /* --- 🛡️ BLINDAJE QUIRÚRGICO ANTI-GLITCH 🛡️ --- */
+            /* 1. Aceleración de hardware SOLO en la burbuja */
+            transform: translate3d(0, 0, 0);
+            /* 2. Borde transparente: Obliga al navegador a calcular bien los límites */
+            border: 1px solid transparent;
+            /* 3. Evita que el fondo se salga del borde */
+            background-clip: padding-box;
         }
 
         /* Burbujas Estilizadas */
