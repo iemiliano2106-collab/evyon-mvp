@@ -158,9 +158,17 @@
         .user-avatar { background: #3cd186; color: #000; }
 
         .message-bubble {
-            padding: 14px 18px; border-radius: 18px; max-width: 85%;
-            font-size: 15px; line-height: 1.5; position: relative;
+            padding: 10px 16px; /* Reduje el padding vertical de 14px a 10px */
+            border-radius: 18px;
+            max-width: 85%;
+            font-size: 15px;
+            line-height: 1.4; /* Ajuste para que el texto no se estire tanto */
+            position: relative;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            
+            /* NUEVO: Esto asegura que la burbuja se abrace al texto */
+            width: fit-content; 
+            word-wrap: break-word;
         }
 
         /* Burbujas Estilizadas */
