@@ -204,10 +204,19 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         .user .message-bubble {
-            background: linear-gradient(135deg, #3cd186, #22c55e); /* Gradiente Verde EVYON */
+            background: linear-gradient(135deg, #3cd186, #22c55e);
             color: #0f172a; font-weight: 500;
             border-bottom-right-radius: 4px;
-            box-shadow: 0 4px 15px rgba(60, 209, 134, 0.2);
+            
+            /* CAMBIO TÉCNICO: */
+            /* 1. Quitamos box-shadow (causa la línea) */
+            box-shadow: none; 
+            
+            /* 2. Usamos filter (más preciso, no deja rastros) */
+            filter: drop-shadow(0 4px 6px rgba(60, 209, 134, 0.3));
+            
+            /* 3. Estabilizador final para Safari/Chrome */
+            transform: translateZ(0);
         }
 
         .chat-title { font-weight: 800; color: #3cd186; margin-top: 15px; margin-bottom: 5px; font-size: 1.1em; letter-spacing: -0.5px; }
