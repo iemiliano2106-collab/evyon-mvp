@@ -158,6 +158,10 @@
         .message-row { 
             display: flex; align-items: flex-end; gap: 10px; max-width: 100%; 
             animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+            /* PEGA ESTO AQUÍ: */
+            will-change: transform, opacity;
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
