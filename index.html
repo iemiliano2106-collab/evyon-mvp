@@ -133,13 +133,20 @@
         .chat-box {
             flex: 1; 
             overflow-y: auto; 
-            padding: 20px 10px; /* Padding optimizado para evitar saltos */
+            
+            /* CAMBIO AQUÍ: */
+            /* Antes tenías: padding: 20px; */
+            /* Ahora usamos 20px arriba/abajo y 10px a los lados */
+            padding: 20px 10px; 
+            
             display: flex; 
             flex-direction: column; 
             gap: 18px;
             scroll-behavior: smooth;
-            scrollbar-gutter: stable; /* Evita el salto de la barra de scroll */
-            isolation: isolate; /* NUEVO: Aísla el renderizado para evitar glitches */
+            
+            /* TRUCO EXTRA: */
+            /* Esto evita el salto brusco reservando el espacio del scroll siempre */
+            scrollbar-gutter: stable; 
         }
 
         /* Scrollbar Personalizado (Sleek) */
@@ -148,20 +155,24 @@
         .chat-box::-webkit-scrollbar-track { background: transparent; }
 
         /* Mensajes */
+        /* Busca esto en tu código (aprox línea 158) y déjalo así: */
+
         .message-row {
-            display: flex; 
-            align-items: flex-end; 
-            gap: 10px; 
-            max-width: 100%;
-            animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        display: flex; 
+        align-items: flex-end; 
+        gap: 10px; 
+        max-width: 100%;
+        animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 
-            /* --- PARCHE ANTI-GLITCH ACTIVADO --- */
-            will-change: transform, opacity;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
-            backface-visibility: hidden;
+        /* --- 🛡️ INICIO DEL PARCHE ANTI-GLITCH --- */
+        /* Estas son las líneas que FALTAN en tu foto: */
+        will-change: transform, opacity;
+        transform: translateZ(0);
+        -webkit-transform: translateZ(0); /* Refuerzo para Mac */
+        backface-visibility: hidden;
+        /* --- 🛡️ FIN DEL PARCHE --- */
+
         }
-
         @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .message-row.user { justify-content: flex-end; }
@@ -175,20 +186,17 @@
         .user-avatar { background: #3cd186; color: #000; }
 
         .message-bubble {
-            padding: 10px 16px;
+            padding: 10px 16px; /* Reduje el padding vertical de 14px a 10px */
             border-radius: 18px;
             max-width: 85%;
             font-size: 15px;
-            line-height: 1.4;
+            line-height: 1.4; /* Ajuste para que el texto no se estire tanto */
             position: relative;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             
+            /* NUEVO: Esto asegura que la burbuja se abrace al texto */
             width: fit-content; 
             word-wrap: break-word;
-
-            /* NUEVO: Refuerzo Anti-Glitch en la burbuja */
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
         }
 
         /* Burbujas Estilizadas */
@@ -297,7 +305,7 @@
 
     <script>
         /* --------------------------
-           CONFIGURACIÓN Y DATOS
+           CONFIGURACIÓN Y DATOS (LÓGICA INTACTA)
         ---------------------------*/
         let apiKey = localStorage.getItem("evyon_api_key");
         let currentUserData = null;
@@ -412,7 +420,8 @@
         }
 
        /* --------------------------
-           CEREBRO AVANZADO V2.1
+           CEREBRO AVANZADO V2.1 (CORRECCIÓN DE MODALES)
+           Arreglo: Ya no rechaza saludos, solo temas irrelevantes.
         ---------------------------*/
         function getDynamicSystemPrompt(text, user) {
             const lowerText = text.toLowerCase();
@@ -452,7 +461,7 @@
                 EJEMPLO: "¿CANSADO? ¡LOS MUERTOS ESTÁN CANSADOS! 💀 ¡DAME 20 BURPEES AHORA! 🔥"`;
             }
 
-            // 🥗 MODO 3: EXPERTO INTEGRAL
+            // 🥗 MODO 3: EXPERTO INTEGRAL (MODIFICADO AQUÍ 👇)
             return `Rol: Eres EVYON, experto en Biohacking y Rendimiento.
             Asignado a: ${user.name}.
 
@@ -581,15 +590,20 @@
 
             let avatar = document.createElement("div");
             avatar.className = `avatar ${type}-avatar`;
-           
+           // --- INICIO DEL NUEVO CÓDIGO (Opción Bio-Luz) ---
+            // --- OPCIÓN 2: HALO ORBITAL ---
             if (type === 'bot') {
                 avatar.innerHTML = ""; 
+                
+                // Círculo vacío
                 avatar.style.width = "18px";
                 avatar.style.height = "18px";
                 avatar.style.borderRadius = "50%";
-                avatar.style.border = "2px solid #3cd186"; 
+                avatar.style.border = "2px solid #3cd186"; // El anillo físico
                 avatar.style.background = "transparent";
                 avatar.style.margin = "6px";
+                
+                // Doble brillo (interno y externo)
                 avatar.style.boxShadow = "0 0 10px #3cd186, inset 0 0 10px #3cd186";
                 avatar.style.animation = "halo-pulse 3s infinite ease-in-out";
                 
@@ -608,6 +622,7 @@
             } else {
                 avatar.innerHTML = '👤';
             }
+            // --- FIN DEL NUEVO CÓDIGO ---
 
             let bubble = document.createElement("div");
             bubble.className = "message-bubble";
@@ -639,38 +654,39 @@
             let row = document.createElement("div");
             row.className = "message-row bot";
             row.id = id;
-            
-            row.innerHTML = `
-                <div class="avatar" style="
-                    width: 32px; height: 32px; 
-                    border-radius: 50%; 
-                    border: 2px solid #3cd186; 
-                    background: transparent; 
-                    box-shadow: 0 0 10px #3cd186;
-                    animation: halo-spin 1s linear infinite;
-                    margin-right: 10px;
-                "></div>
-                <div class="message-bubble" style="
-                    color: #8899a6; 
-                    font-style: italic; 
-                    background: rgba(255,255,255,0.05); 
-                    border: 1px solid rgba(255,255,255,0.05);
-                ">Procesando...</div>
-            `;
+            // --- NUEVO INDICADOR DE CARGA (Estilo Halo) ---
+    row.innerHTML = `
+        <div class="avatar" style="
+            width: 32px; height: 32px; 
+            border-radius: 50%; 
+            border: 2px solid #3cd186; 
+            background: transparent; 
+            box-shadow: 0 0 10px #3cd186;
+            animation: halo-spin 1s linear infinite;
+            margin-right: 10px;
+        "></div>
+        <div class="message-bubble" style="
+            color: #8899a6; 
+            font-style: italic; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.05);
+        ">Procesando...</div>
+    `;
 
-            if (!document.getElementById('anim-halo-spin')) {
-                let style = document.createElement('style');
-                style.id = 'anim-halo-spin';
-                style.innerHTML = `
-                    @keyframes halo-spin {
-                        0% { transform: rotate(0deg); opacity: 0.5; }
-                        50% { opacity: 1; }
-                        100% { transform: rotate(360deg); opacity: 0.5; }
-                    }
-                `;
-                document.head.appendChild(style);
+    // Inyectamos la animación de rotación si no existe
+    if (!document.getElementById('anim-halo-spin')) {
+        let style = document.createElement('style');
+        style.id = 'anim-halo-spin';
+        style.innerHTML = `
+            @keyframes halo-spin {
+                0% { transform: rotate(0deg); opacity: 0.5; }
+                50% { opacity: 1; }
+                100% { transform: rotate(360deg); opacity: 0.5; }
             }
-            
+        `;
+        document.head.appendChild(style);
+    }
+    // --- FIN ---
             box.appendChild(row);
             box.scrollTop = box.scrollHeight;
             return id;
@@ -695,3 +711,4 @@
     </script>
 </body>
 </html>
+
