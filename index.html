@@ -128,11 +128,25 @@
         .header-btn:hover { color: #fff; text-decoration: none; }
         .btn-clear:hover { color: #ff6b6b; }
 
+        
         /* Chat Area */
         .chat-box {
-            flex: 1; overflow-y: auto; padding: 20px;
-            display: flex; flex-direction: column; gap: 18px;
+            flex: 1; 
+            overflow-y: auto; 
+            
+            /* CAMBIO AQUÍ: */
+            /* Antes tenías: padding: 20px; */
+            /* Ahora usamos 20px arriba/abajo y 10px a los lados */
+            padding: 20px 10px; 
+            
+            display: flex; 
+            flex-direction: column; 
+            gap: 18px;
             scroll-behavior: smooth;
+            
+            /* TRUCO EXTRA: */
+            /* Esto evita el salto brusco reservando el espacio del scroll siempre */
+            scrollbar-gutter: stable; 
         }
 
         /* Scrollbar Personalizado (Sleek) */
