@@ -163,9 +163,20 @@
             gap: 10px; 
             max-width: 100%;
             /* Solo dejamos la animación, quitamos cualquier "transform" o "will-change" de aquí */
-            animation: slideIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+            animation: revealIn 0.25s ease-out both;
         }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* 🚀 SOLUCIÓN RECOMENDADA POR IA: REVEAL-IN 
+           Usamos clip-path en lugar de transform para evitar el glitch gráfico */
+        @keyframes revealIn {
+            from { 
+                opacity: 0; 
+                clip-path: inset(0 0 100% 0); /* Oculto desde abajo */
+            }
+            to { 
+                opacity: 1; 
+                clip-path: inset(0 0 0 0); /* Totalmente visible */
+            }
+        }
 
         .message-row.user { justify-content: flex-end; }
         
@@ -188,14 +199,9 @@
             
             width: fit-content; 
             word-wrap: break-word;
-
-            /* --- 🛡️ BLINDAJE QUIRÚRGICO ANTI-GLITCH 🛡️ --- */
-            /* 1. Aceleración de hardware SOLO en la burbuja */
-            transform: translate3d(0, 0, 0);
-            /* 2. Borde transparente: Obliga al navegador a calcular bien los límites */
-            border: 1px solid transparent;
-            /* 3. Evita que el fondo se salga del borde */
-            background-clip: padding-box;
+            
+            /* HE ELIMINADO los 'transform' y 'border' que pusimos antes. 
+               Regresamos a la versión limpia sin parches extraños. */
         }
 
         /* Burbujas Estilizadas */
