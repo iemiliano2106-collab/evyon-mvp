@@ -246,8 +246,27 @@
             transform: translateZ(0);
         }
 
-        /* --- ESTILOS DE TEXTO INTELIGENTE (ACTUALIZADO) --- */
-        .chat-title { font-weight: 800; color: #3cd186; margin-top: 15px; margin-bottom: 5px; font-size: 1.1em; letter-spacing: -0.5px; }
+        .chat-title { 
+            font-weight: 800; 
+            color: #3cd186; 
+            
+            /* --- AJUSTE DE JERARQUÍA VISUAL --- */
+            
+            /* 1. SEPARACIÓN SUPERIOR (El "Aire") */
+            /* Aumentamos a 25px o 30px para que se note claramente que es un tema nuevo */
+            margin-top: 25px; 
+            
+            /* 2. CONEXIÓN INFERIOR (El "Pegamento") */
+            /* Bajamos a 2px para que el título "abrace" a su contenido */
+            margin-bottom: 2px; 
+            
+            /* 3. AJUSTE FINO */
+            /* Evita que la propia altura de la letra genere huecos falsos */
+            line-height: 1.2;
+            
+            font-size: 1.1em; 
+            letter-spacing: -0.5px; 
+        }
         
         /* 1. Negrita "Normal" (En medio de texto) -> BLANCO */
         strong { color: #fff; font-weight: 700; } 
