@@ -624,20 +624,31 @@
             // 1. Limpiar líneas horizontales
             let formatted = text.replace(/^\s*---\s*$/gm, '');
             
-            // 2. Títulos (### Título) -> Verde y Grande
+            // 2. Títulos Grandes (###) -> Verde
             formatted = formatted.replace(/^\s*#{1,6}\s+(.*$)/gm, '<div class="chat-title">$1</div>');
             
-            // 3. Negritas (**texto**) -> Se convertirán en verde por el CSS
-            formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // 3. NEGRITAS INTELIGENTES (AQUÍ ESTÁ LA MAGIA 🧠)
+            formatted = formatted.replace(/\*\*(.*?)\*\*/g, function(match, content, offset, fullString) {
+                // A. Si tiene dos puntos después (Ej: **Nota**: ) -> ES CLAVE -> VERDE
+                if (fullString[offset + match.length] === ':') return `<strong class="highlight">${content}</strong>`;
+                
+                // B. Si es inicio de lista (Ej: "- **Pollo**") -> ES CLAVE -> VERDE
+                // Buscamos qué hay antes de la negrita en la misma línea
+                let before = fullString.substring(0, offset).split('\n').pop(); 
+                // Si antes solo hay espacios, guiones o números...
+                if (/^(\s*|\s*-\s*|\s*\d+\.\s*)$/.test(before)) {
+                    return `<strong class="highlight">${content}</strong>`;
+                }
+                
+                // C. Si está en medio de una frase normal -> ÉNFASIS NORMAL -> BLANCO
+                return `<strong>${content}</strong>`;
+            });
             
-            // 4. Listas Numéricas (1. Algo) -> Colorear el número
-            // Detecta "Número." al inicio de una línea
-            formatted = formatted.replace(/^(\d+)\.\s+(.*)/gm, '<span class="list-number">$1.</span> $2<br>');
+            // 4. Listas Numéricas y Viñetas
+            formatted = formatted.replace(/^(\d+)\.\s+(.*)/gm, '<span class="list-number">$1.</span> $2');
+            formatted = formatted.replace(/^- (.*)/gm, '• $1');
             
-            // 5. Viñetas (- Algo) -> Convertir en bullet
-            formatted = formatted.replace(/^- (.*)/gm, '• $1<br>');
-            
-            // 6. Saltos de línea (Convertir \n en <br> para que no sea un muro de texto)
+            // 5. Saltos de línea
             formatted = formatted.replace(/\n/g, '<br>');
             
             return formatted;
