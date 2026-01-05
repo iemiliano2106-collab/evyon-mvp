@@ -246,15 +246,19 @@
             transform: translateZ(0);
         }
 
+        /* --- ESTILOS DE TEXTO INTELIGENTE (ACTUALIZADO) --- */
         .chat-title { font-weight: 800; color: #3cd186; margin-top: 15px; margin-bottom: 5px; font-size: 1.1em; letter-spacing: -0.5px; }
         
-        /* CAMBIO: Ahora las negritas del Bot siempre serán VERDES */
-        strong { color: #3cd186; font-weight: 700; } 
+        /* 1. Negrita "Normal" (En medio de texto) -> BLANCO */
+        strong { color: #fff; font-weight: 700; } 
         
-        /* Mantenemos las del usuario en negro para que se lean en la burbuja verde */
-        .user strong { color: #000; } 
+        /* 2. Negrita "Highlight" (Títulos, Listas, Claves) -> VERDE NEÓN */
+        .highlight { color: #3cd186; }
         
-        /* NUEVO: Clase para forzar números verdes en listas */
+        /* 3. Ajustes para el Usuario (Todo negro siempre) */
+        .user strong, .user .highlight { color: #000; } 
+        
+        /* 4. Números de lista -> VERDE */
         .list-number { color: #3cd186; font-weight: 800; margin-right: 4px; }
         
 
