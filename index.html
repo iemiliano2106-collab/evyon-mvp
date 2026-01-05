@@ -279,9 +279,24 @@
         .input-container:focus-within { border-color: rgba(60, 209, 134, 0.5); }
 
         .chat-input {
-            flex: 1; background: transparent; border: none;
-            color: white; padding: 12px; font-family: inherit; font-size: 16px;
-            max-height: 120px; outline: none; resize: none;
+            flex: 1; 
+            background: transparent; 
+            border: none;
+            color: white; 
+            font-family: inherit; 
+            font-size: 16px;
+            
+            /* AJUSTE QUIRÚRGICO DE ESPACIO */
+            /* Reduje el padding de 12px a 10px y definí line-height exacto */
+            padding: 10px; 
+            line-height: 20px; 
+            
+            max-height: 120px; 
+            outline: none; 
+            resize: none;
+            
+            /* Esto ayuda a centrar visualmente el texto en una sola línea */
+            margin: 0;
         }
         .chat-input::placeholder { color: #64748b; }
 
@@ -731,8 +746,12 @@
         }
 
         function autoResize(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = textarea.scrollHeight + 'px';
+            // 1. Reseteamos la altura para obtener el cálculo real de reducción
+            textarea.style.height = 'auto'; 
+            
+            // 2. Ajustamos a la altura del contenido (scrollHeight)
+            // El '20' es un mínimo de seguridad para que no desaparezca
+            textarea.style.height = (textarea.scrollHeight) + 'px';
         }
 
         function handleChatKey(e) {
