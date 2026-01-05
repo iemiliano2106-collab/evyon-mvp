@@ -631,29 +631,26 @@
             // 2. Títulos Grandes (###) -> Verde
             formatted = formatted.replace(/^\s*#{1,6}\s+(.*$)/gm, '<div class="chat-title">$1</div>');
             
-            // 3. NEGRITAS INTELIGENTES (AQUÍ ESTÁ LA MAGIA 🧠)
+            // 3. Negritas Inteligentes
             formatted = formatted.replace(/\*\*(.*?)\*\*/g, function(match, content, offset, fullString) {
-                // A. Si tiene dos puntos después (Ej: **Nota**: ) -> ES CLAVE -> VERDE
                 if (fullString[offset + match.length] === ':') return `<strong class="highlight">${content}</strong>`;
-                
-                // B. Si es inicio de lista (Ej: "- **Pollo**") -> ES CLAVE -> VERDE
-                // Buscamos qué hay antes de la negrita en la misma línea
                 let before = fullString.substring(0, offset).split('\n').pop(); 
-                // Si antes solo hay espacios, guiones o números...
                 if (/^(\s*|\s*-\s*|\s*\d+\.\s*)$/.test(before)) {
                     return `<strong class="highlight">${content}</strong>`;
                 }
-                
-                // C. Si está en medio de una frase normal -> ÉNFASIS NORMAL -> BLANCO
                 return `<strong>${content}</strong>`;
             });
             
-            // 4. Listas Numéricas y Viñetas
+            // 4. Listas
             formatted = formatted.replace(/^(\d+)\.\s+(.*)/gm, '<span class="list-number">$1.</span> $2');
             formatted = formatted.replace(/^- (.*)/gm, '• $1');
             
             // 5. Saltos de línea
             formatted = formatted.replace(/\n/g, '<br>');
+
+            // 6. 🧼 ELIMINAR ESPACIO SOBRANTE TRAS TÍTULOS (ESTA ES LA CLAVE)
+            // Si hay un título seguido de un <br>, borramos el <br> para que el CSS controle la distancia.
+            formatted = formatted.replace(/<\/div>\s*<br>/g, '</div>');
             
             return formatted;
         }
